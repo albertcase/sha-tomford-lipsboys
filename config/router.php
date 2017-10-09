@@ -15,3 +15,8 @@ $routers['/clear'] = array('CampaignBundle\Page', 'clearCookie');
 $routers['/ajax/post'] = array('CampaignBundle\Api', 'form');
 $routers['/'] = array('CampaignBundle\Page', 'index');
 
+//API
+$routers['/api/phonecode'] = array('CampaignBundle\Api', 'phoneCode');
+$routers['/api/checkphonecode'] = array('CampaignBundle\Api', 'checkPhoneCode');
+$routers['/api/apply'] = array('CampaignBundle\Api', 'apply');
+$routers['/api/applylist'] = array('CampaignBundle\Api', 'applyList');
