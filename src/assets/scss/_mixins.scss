@@ -1,0 +1,77 @@
+// ==========
+// TRANS-PREP
+// -----
+// Gives backface visibility hidden to remove flickering effect on Webkit browsers
+// http://blog.teamtreehouse.com/increase-your-sites-performance-with-hardware-accelerated-css
+// ==========
+@mixin trans-prep {
+  // backface visibility
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  backface-visibility: hidden;
+
+  // Resets perspectives
+  -webkit-perspective: 1000;
+  -moz-perspective: 1000;
+  -ms-perspective: 1000;
+  perspective: 1000;
+}
+
+@mixin clearfix {
+  *zoom: 1;
+  &:before, &:after {
+    display: table;
+    line-height: 0;
+    content: "";
+  }
+  &:after {
+    clear: both;
+  }
+}
+@mixin vendor-prefix($name, $argument) {
+  #{$name}: #{$argument};
+  -ms-#{$name}: #{$argument};
+  -moz-#{$name}: #{$argument};
+  -o-#{$name}: #{$argument};
+  -webkit-#{$name}: #{$argument};
+}
+
+// keyframes mixin
+@mixin keyframes($name) {
+  @-webkit-keyframes #{$name} {
+    @content;
+  }
+  @-moz-keyframes #{$name} {
+    @content;
+  }
+  @-ms-keyframes #{$name} {
+    @content;
+  }
+  @keyframes #{$name} {
+    @content;
+  }
+}
+
+
+//size
+@mixin size($width,$height){
+  width: $width;
+  height: $height;
+}
+
+//verticle and center
+@mixin verticle($w,$h){
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-top: -$h/2;
+  margin-left: -$w/2;
+}
+
+//triangle
+@mixin triangle-right($color,$bl,$bt){
+  border-left: $color $bl solid;
+  border-top: transparent $bt solid;
+  border-bottom: transparent $bt solid;
+}

@@ -1,0 +1,823 @@
+@mixin fullabsolute($left,$top,$w,$h,$zindex){
+  position: absolute;
+  left: $left;
+  top: $top;
+  z-index: $zindex;
+  @include size($w,$h);
+}
+
+/*Common setting for all page*/
+html,body{
+  width: 100%;
+  height: 100%;
+}
+body{
+  background: url("../images/bg.jpg") center center no-repeat;
+  background-size: cover;
+}
+
+//for preload
+.preload{
+  @include fullabsolute(0,0,100%,100%,100);
+  background: url("../images/preload-bg.jpg") center center no-repeat;
+  background-size: cover;
+  .animate-flower{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    @include transition(opacity 4s linear);
+    background: url("../images/preload-flower.jpg")  center center no-repeat;
+    background-size: cover;
+    &.fadenow{
+      opacity: 1;
+    }
+  }
+  .loading-num{
+    position: absolute;
+    right: 2.8rem;
+    bottom: 10vh;
+    width: 1.2rem;
+    height: 0.6rem;
+    @include transform(rotate(90deg));
+    .num{
+      width: .6rem;
+      height: .6rem;
+      display: inline-block;
+      text-align: center;
+    }
+  }
+}
+
+.logo{
+  @include size(2.46rem,0.53rem);
+}
+
+//for terms-pop
+.terms-pop{
+  .inner{
+    @include size(7.42rem,10.83rem);
+    background: url("../images/pop-bg.png") no-repeat;
+    background-size: 100%;
+    box-sizing: border-box;
+    padding-top: 0.9rem;
+    background-position: -0.05rem 0;
+  }
+  .title{
+    margin-bottom: 0.4rem;
+    background: transparent;
+    color: #343434;
+    font-size: 0.52rem;
+    padding: 0;
+    font-weight: bold;
+  }
+  .pcontent{
+    width: 6rem;
+    margin: 0 auto;
+    text-align: center;
+    padding: 0;
+    .subtitle{
+      display: inline-block;
+      background: #090909;
+      color: #fff;
+      font-size: 0.3rem;
+      font-weight: normal;
+      padding: 0.04rem 0.2rem;
+      margin-bottom: 0.1rem;
+    }
+    .des{
+      color: #6b6b6b;
+      font-size: 0.24rem;
+      line-height: 1.8;
+    }
+    .tips-2{
+      font-size: 0.2rem;
+    }
+    .product-name{
+      color: #6b6b6b;
+      font-size: 0.22rem;
+    }
+  }
+  .btn-close{
+    top: auto;
+    bottom: 0.8rem;
+    left: 50%;
+    margin-left: -0.3rem;
+    background: #343434;
+    border-radius: 100%;
+    @include size(0.6rem,0.6rem);
+  }
+}
+
+.pin{
+  opacity: 0;
+  z-index: -10;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  @include size(100%,100%);
+  padding-top: 1.6rem;
+  box-sizing: border-box;
+  overflow: hidden;
+  @include transition(opacity 1s);
+  //display: none;
+  &.current{
+    display: block;
+    opacity: 1;
+    z-index: 1;
+  }
+}
+
+
+.btn{
+  position: relative;
+  text-align: center;
+  display: block;
+  width: 3.24rem;
+  height: 0.76rem;
+  margin: 0 auto;
+  color: #fff;
+  font-size: 0.32rem;
+  box-sizing: border-box;
+  .tt{
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    @include size(100%,100%);
+    line-height: .76rem;
+    background: #000;
+    .times{
+      font-size: 0.24rem;
+    }
+  }
+  &:after,&:before{
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: -.06rem;
+    z-index: 0;
+    background: #6a6d8e;
+    filter: blur(6px);
+    @include size(100%,60%);
+  }
+  &:before{
+    left: 0;
+    @include transform(skew(0deg,8deg));
+  }
+  &:after{
+    right: 0;
+    @include transform(skew(0deg,-8deg));
+  }
+}
+
+//for loading
+.loading-wrap{
+  display: none;
+}
+
+//for wrapper
+.wrapper{
+  opacity: 0;
+  @include fullabsolute(0,0,100%,100%,1);
+}
+.container{
+  @include fullabsolute(0,0,100%,100%,10);
+}
+
+//for border frame
+.border-frame{
+  @include fullabsolute(0,0,100vw,100vh,5);
+  .bf{
+    @include fullabsolute(0,0,100vw,100vh,1);
+    box-sizing: border-box;
+    border-image: -webkit-linear-gradient(-45deg, #cea8dd,#d1a9dd,#babff0) 30 30;
+    border-image: -moz-linear-gradient(-45deg,#cea8dd,#d1a9dd,#babff0) 30 30;
+    border-image: linear-gradient(-45deg,#cea8dd,#d1a9dd,#babff0) 30 30;
+    border-style: solid;
+    border-width: 2px;
+    &.bf-2{
+      @include fullabsolute(4px,4px,calc(100vw - 8px),calc(100vh - 8px),1);
+    }
+    &.bf-3{
+      @include fullabsolute(8px,8px,calc(100vw - 16px),calc(100vh - 16px),1);
+    }
+  }
+}
+
+//for foreground
+.foreground{
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  @include size(100%,100%);
+  z-index: 1;
+  overflow: hidden;
+  .fb-flower{
+    position: absolute;
+    bottom: 0;
+  }
+  .fb-1{
+    @include size(4.61rem,4.48rem);
+    left: -1.7rem;
+    bottom: -1.4rem;
+  }
+  .fb-2{
+    @include size(0.98rem,5.16rem);
+    right: 0.4rem;
+    bottom: -2rem;
+  }
+}
+
+
+
+//for pin-landing
+  //  setting animate time parameter
+$ani-delay-1: 1000ms;
+$ani-delay-2: 2000ms;
+$ani-delay-3: 3000ms;
+$ani-delay-4: 4000ms;
+$ani-delay-5: 5000ms;
+#pin-landing{
+  .t1{
+    position: relative;
+    @include size(4.47rem,0.34rem);
+    margin: 0 auto 0.25rem;
+  }
+  .lucky-info{
+    text-align: center;
+    font-size: 0.2rem;
+    margin: 0 auto 0.4rem;
+    color: #6b6b6b;
+    //width: 60vw;
+  }
+  .product-show{
+    position: relative;
+    left: 0.3rem;
+    @include size(3.29rem,4.19rem);
+    margin: 0 auto;
+  }
+  .des{
+    text-align: center;
+  }
+  .btn{
+    position: relative;
+    z-index: 2;
+    margin: 0.3rem auto;
+  }
+  .btn-start-luckydraw{
+    &.disabled{
+      .tt{
+        background: #999;
+      }
+    }
+  }
+  .link-terms{
+    position: relative;
+    z-index: 3;
+    width: 3rem;
+    text-align: center;
+    margin: 0.4rem auto 0;
+    color: #6b6b6b;
+    font-size: 0.22rem;
+    text-decoration: underline;
+  }
+  .foreground{
+    .box-top{
+      opacity: 0;
+      position: absolute;
+      z-index: 1;
+      bottom: 0.4rem;
+      left: 0.8rem;
+      @include size(1.54rem,1.74rem);
+      @include transition(all 4s);
+    }
+    .box-bottom{
+      opacity: 0;
+      position: absolute;
+      z-index: 2;
+      bottom: 0.5rem;
+      right: 0.8rem;
+      @include size(2.28rem,3.78rem);
+      @include transition(all 4s);
+    }
+    .product-demo{
+      position: absolute;
+      z-index: 1;
+      bottom: 1.8rem;
+      right: -2rem;
+      //transform: rotate(-15deg);
+      @include size(1.54rem,2.01rem);
+    }
+    .product-name{
+      position: absolute;
+      left: 0;
+      bottom: -0.2rem;
+      width: 100%;
+    }
+  }
+  .flower{
+    position: absolute;
+    left: 0.4rem;
+    bottom: -5rem;
+    @include size(1.02rem,5.2rem);
+    @include transition(bottom 2s $ani-delay-1);
+  }
+  .fleurs{
+    position: absolute;
+    right: 0.2rem;
+    bottom: -2rem;
+    @include size(2.17rem,4.74rem);
+    @include transition(bottom 2s $ani-delay-1);
+    .top-flower{
+      position: absolute;
+      left: 0;
+      top: 0;
+      @include size(2.17rem,4.74rem);
+      transform-origin: 61% 40%;
+      z-index: 2;
+    }
+    .bottom-flower{
+      position: absolute;
+      right: 0;
+      top: 0;
+      @include size(0.59rem,4.74rem);
+      transform-origin: 61% 40%;
+      z-index: 1;
+    }
+    //@include transition(bottom 2s $ani-delay-1);
+  }
+  .ani-petal{
+    position: absolute;
+    top: 0.6rem;
+    left: 100%;
+    opacity: 0;
+    z-index: 1;
+    @include size(1.09rem,1.26rem);
+  }
+  &.current{
+    .ani-petal{
+      @include animation(petal 6s 1);
+      @include keyframes(petal){
+        0%{
+          top: 0.6rem;
+          left: 100%;
+          opacity: 0;
+          @include transform(rotate(0deg));
+        }
+        10%{
+          //top: 1rem;
+          opacity: 1;
+        }
+        30%{
+
+        }
+        50%{
+          opacity: 0;
+          top: 3rem;
+          left: -20%;
+          @include transform(rotate(100deg));
+          //opacity: 1;
+        }
+        55%{
+          opacity: 1;
+        }
+        90%{
+
+        }
+        100%{
+          top: 7rem;
+          left: 100%;
+          @include transform(rotate(-100deg));
+          opacity: 0;
+        }
+      }
+    }
+    .flower{
+      bottom: 0rem;
+    }
+    .fleurs{
+      bottom: 0rem;
+      .top-flower{
+        @include animation(fleursaction1 5s 1 forwards);
+        @include keyframes(fleursaction1){
+          0%{
+            @include transform(rotate(0deg));
+            //bottom: 0;
+          }
+          10%{
+            @include transform(rotate(16deg));
+          }
+          20%{
+            //bottom: 0;
+          }
+          50%{
+            @include transform(rotate(30deg));
+          }
+          80%{
+            //@include transform(rotate(0deg));
+          }
+          100%{
+            //bottom: 0;
+            @include transform(rotate(0deg));
+          }
+        }
+      }
+      .bottom-flower{
+        @include animation(fleursaction2 5s 1 forwards);
+        @include keyframes(fleursaction2){
+          0%{
+            transform: skewY(0deg);
+          }
+          60%{
+            transform: skewY(0deg);
+          }
+          100%{
+            transform: skewY(30deg);
+          }
+        }
+      }
+    }
+
+    .foreground{
+      .box-top{
+        //@include animation(outandfade $ani-delay-2 1 forwards);
+        opacity: 1;
+        left: 3.2rem;
+      }
+      .box-bottom{
+        opacity: 1;
+        right: 2.2rem;
+      }
+      .product-demo{
+        //bottom: 1.8rem;
+        //right: 2rem;
+        //transform: rotate(-15deg);
+        @include animation(fadefromright $ani-delay-2 $ani-delay-1 1 forwards);
+        @include keyframes(fadefromright){
+          0%{
+            bottom: 2.8rem;
+            right: -2rem;
+            @include transform(rotate(15deg));
+          }
+          100%{
+            bottom: 1.8rem;
+            right: 2rem;
+            @include transform(rotate(-15deg));
+          }
+        }
+      }
+    }
+  }
+}
+@keyframes overandover {
+  0%{
+    @include transform(translateY(2rem));
+  }
+  100%{
+    @include transform(translateY(-4.8rem));
+  }
+}
+
+
+/*
+  For pin-fillform
+*/
+#pin-fillform{
+  .msgbox{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 1rem;
+    text-align: center;
+    line-height: 1rem;
+    background: rgba(0,0,0,0.8);
+    color: #fff;
+  }
+  .title{
+    font-size: 0.26rem;
+    color: #6b6b6b;
+    text-align: center;
+    margin: 0.3rem auto 0.6rem;
+  }
+  #form-contact{
+    position: relative;
+    z-index: 2;
+    width: 80vw;
+    margin: 0 auto;
+    font-size: 0.26rem;
+    color: #6b6b6b;
+    .input-box{
+      position: relative;
+      margin-bottom: 0.2rem;
+      text-align: center;
+      input[type="text"],
+      input[type="tel"],
+      select{
+        display: inline-block;
+        width: 100%;
+        padding: 0.15rem 0;
+        font-size: 0.26rem;
+        text-align: center;
+        border: none;
+        background: transparent;
+        border-bottom: #a4b3e7 1px solid;
+        mask-image: linear-gradient(to right,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 15%,rgba(255,255,255,1) 50%,rgba(255,255,255,1) 85%,rgba(255,255,255,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        -webkit-mask-image: linear-gradient(to right,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 15%,rgba(255,255,255,1) 50%,rgba(255,255,255,1) 85%,rgba(255,255,255,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */;
+        -webkit-mask-image: -webkit-linear-gradient(left,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 15%,rgba(255,255,255,1) 50%,rgba(255,255,255,1) 85%,rgba(255,255,255,0) 100%); /* Chrome10-25,Safari5.1-6 */
+      }
+    }
+    .select-box{
+      position: relative;
+      input[type="text"]{
+        position: relative;
+        z-index: 1;
+      }
+      select{
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        opacity: 0;
+      }
+    }
+    .input-box-city-district{
+      .select-box{
+        display: inline-block;
+        width: 48%;
+      }
+    }
+    .btn-submit{
+      margin-top: 0.6rem;
+    }
+    .input-box-validate-code{
+      #input-validate-code{
+        width: 2.8rem;
+        display: inline-block;
+        margin-right: 0.2rem;
+      }
+      .validate-code{
+        position: relative;
+        width: 2.4rem;
+        display: inline-block;
+        text-align: center;
+        span{
+          display: block;
+        }
+      }
+      .validate-code-img{
+        width:2rem;
+        margin: 0 auto;
+      }
+      .code-text{
+        position: absolute;
+        bottom: -0.4rem;
+        width: 100%;
+        color: #686c6d;
+        font-size: 0.18rem;
+      }
+    }
+    .input-box-validate-message-code{
+      #input-validate-message-code{
+        width: 2.8rem;
+        margin-right: 0.2rem;
+        display: inline-block;
+      }
+      .btn-get-msg-code{
+        position: relative;
+        width: 2.8rem;
+        display: inline-block;
+        font-size: .26rem;
+        background-size: 100% 100%;
+        //height: 1rem;
+        text-align: center;
+        padding-top: 0.12rem;
+        padding-left: 0.14rem;
+        box-sizing: border-box;
+        span{
+          display: inline-block;
+          font-size: 0.2rem;
+        }
+      }
+    }
+  }
+  .foreground{
+    position: absolute;
+    left: 0.7rem;
+    z-index: 1;
+    bottom: -1.2rem;
+    @include size(5.52rem,4.57rem);
+  }
+}
+
+//for pin-gift
+#pin-result,.pin-4{
+  .v-content{
+    top: 40%;
+    width: 100%;
+  }
+  .title{
+    margin-bottom: 0.2rem;
+    text-align: center;
+    color: #343434;
+    font-size: 0.4rem;
+    font-weight: bold;
+  }
+  .des{
+    width: 100%;
+    text-align: center;
+    font-size: 0.26rem;
+    color: #6b6b6b;
+  }
+  .des2{
+    top: 40%;
+  }
+  .prize-item{
+    //display: none;
+    color: #6b6b6b;
+    &.show{
+      display: block;
+    }
+    .tip{
+      display: block;
+      margin-top: 0.5rem;
+      font-size: 0.22rem;
+    }
+  }
+  .btn-getbigprize{
+    position: relative;
+    margin-top: 1.5rem;
+    .product-name-2{
+      position: absolute;
+      bottom: -0.22rem;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      color: #6b6b6b;
+      font-size: 0.22rem;
+    }
+    .num{
+      font-size: 0.22rem;
+    }
+  }
+  .b-img{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+  }
+  .name{
+    margin-top: 0.8rem;
+    font-size: 0.22rem;
+    color: #6b6b6b;
+  }
+  .btn-getproduct{
+    width: 4.6rem;
+    height: 1.4rem;
+    box-sizing: border-box;
+    padding-top: 0.22rem;
+  }
+}
+.guide-share{
+  position: absolute;
+  top: -2rem;
+  right: 0;
+  @include transform(translate(-20px,20px));
+  @include size(1.59rem,1.39rem);
+  @include transform-origin(50% 0);
+  @include animation(lefttoright 2s 1 forwards);
+  @include keyframes(lefttoright){
+    0%{
+      @include transform(translate(-20px,20px));
+    }
+    50%{
+      //@include transform(rotate(-10deg));
+    }
+    100%{
+      @include transform(translate(0px,0px));
+    }
+  }
+}
+
+//for share-popup
+.share-popup{
+  .right-star{
+    right: 0.7rem;
+    top: 0.7rem;
+    //@include size(1.1rem,1.04rem);
+  }
+  .des{
+    padding-top: 0.8rem;
+    text-align: center;
+    font-size: 0.26rem;
+    color: #fff;
+    .bigfont{
+      display: block;
+      font-size: 0.32rem;
+      margin-bottom: 0.2rem;
+    }
+  }
+}
+
+//for unfollow page
+#pin-follow{
+  .qrcode{
+    @include size(3.05rem,3.06rem);
+    margin: 0.8rem auto 0.5rem;
+  }
+  .qrcode-des{
+    @include size(3.53rem,1.57rem);
+    margin: 0 auto;
+  }
+  .foreground{
+    position: absolute;
+    left: 0.7rem;
+    bottom: 0;
+    width: 5.52rem;
+  }
+}
+
+
+//For pop-lottery-result
+.pop-lottery-result{
+  .btn-close{
+    left: 50%;
+    bottom: 2rem;
+    background: #453a3a;
+    top: auto;
+    width: 0.8rem;
+    height: 0.8rem;
+    margin-left: -0.4rem;
+    border-radius: 100%;
+  }
+  .inner{
+    width: 5.6rem;
+    border-radius: 10px;
+    box-shadow: 0px 0px 6px #e689c3;
+  }
+  .msg{
+    position: relative;
+    padding-bottom: 3rem;
+    padding-top: 1.1rem;
+    overflow: hidden;
+  }
+  .f-1{
+    position: absolute;
+    left: -0.2rem;
+    bottom: 0;
+    @include size(3rem,2.5rem);
+    background: url("../images/f-2.png") no-repeat;
+    background-size: 100%;
+  }
+  .f-2{
+    position: absolute;
+    right: 0rem;
+    top: -0.5rem;
+    @include size(1.8rem,0.9rem);
+    background: url("../images/pipe-flower.png") no-repeat;
+    background-size: 100%;
+  }
+  .f-3{
+    position: absolute;
+    right: 0.3rem;
+    bottom: -0.2rem;
+    @include size(0.8rem,2rem);
+    background: url("../images/f-3.png") no-repeat;
+    background-size: 100%;
+  }
+  .result-content{
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 0 0.3rem;
+    .subtitle{
+      font-size: 0.34rem;
+      color: #453a3a;
+      font-weight: bold;
+      span{
+        display: inline-block;
+        min-width: 3rem;
+        padding: 0.1rem 0;
+        border-top: #000 1px solid;
+        border-bottom: #000 1px solid;
+      }
+    }
+    .des{
+      color: #453a3a;
+      font-size: 0.26rem;
+      line-height: 1.8;
+      margin-top: 0.35rem;
+      .btn{
+        margin-top: 0.45rem;
+      }
+    }
+  }
+}
+
+#popup-result-yes{
+  .btn-close{
+    display: none;
+  }
+}
