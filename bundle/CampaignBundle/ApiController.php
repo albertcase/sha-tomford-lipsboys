@@ -47,6 +47,7 @@ class ApiController extends Controller
     {
         global $user;
 
+        //判断是否已经预约过
         if($this->checkUserApply()) {
             $data = array('status' => 3, 'msg' => 'apply again');
             $this->dataPrint($data);
@@ -62,6 +63,12 @@ class ApiController extends Controller
         $name = $request->request->get('name');
         $phone = $request->request->get('phone');
         $timeslot = $request->request->get('timeslot');
+        //检查场次是否已经预约名额已满
+        if($this->checkApplyAlow($timeslot)) {
+            $data = array('status' => 2, 'msg' => 'apply num is null');
+            $this->dataPrint($data);
+        }
+
         $apply = array(
             'uid' => $user->uid,
             'name' => $name,
@@ -80,6 +87,33 @@ class ApiController extends Controller
     }
 
     /**
+     * 判断当前场次是否还有预约名额
+     */
+    private function checkApplyAlow($timeslot)
+    {
+        $nowApplyNum = $this->getApplySum($timeslot);
+        $sumApplyNum = $this->findTimeslotByID($timeslot);
+        if($nowApplyNum < $sumApplyNum) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private function findTimeslotByID($timeslot)
+    {
+        global $user;
+        $sql = "SELECT `name`, `num` FROM `timeslot_list` WHERE `id` = :id";
+        $query = $this->_pdo->prepare($sql);
+        $query->execute(array(':id' => $timeslot));
+        $row = $query->fetch(\PDO::FETCH_ASSOC);
+        if($row) {
+            return (int) $row['num'];
+        }
+        return 0;
+    }
+
+    /**
      * 验证当前用户是否已经预约过
      */
     private function checkUserApply()
@@ -94,29 +128,15 @@ class ApiController extends Controller
         }
         return 0;
     }
-        /**
-     * 查找当前用户是否中奖
-     */
-    private function findLotteryByUid($uid)
-    {
-        $sql = "SELECT `id` FROM `lottery` WHERE `uid` = :uid AND status=1";
-        $query = $this->_pdo->prepare($sql);
-        $query->execute(array(':uid' => $uid));
-        $row = $query->fetch(\PDO::FETCH_ASSOC);
-        if($row) {
-            return 1;
-        }
-        return 0;
-    }
 
     /**
      * 查看当前一共抽中多少奖
      */
     private function getApplySum($timeslot)
     {
-        $sql = "select count(id) AS sum from apply";
+        $sql = "select count(id) AS sum from apply where `timeslot` = :timeslot";
         $query = $this->_pdo->prepare($sql);
-        $query->execute();
+        $query->execute(array(':timeslot' => $timeslot));
         $row = $query->fetch(\PDO::FETCH_ASSOC);
         return (int) $row['sum'];
     }
