@@ -28,22 +28,102 @@ class ApiController extends Controller
         $this->accessToken = $this->getAccessToken();
     }
 
+    /**
+     * 验证短信验证码
+     */
+    public function checkPhoneCodeAction()
+    {
+        $request = $this->request;
+        $fields = array(
+            'phone' => array('cellphone', '121'),
+            'phonecode' => array('notnull', '120'),
+        );
+        $request->validation($fields);
+        $phone = $request->request->get('phone');
+        $phoneCode = $request->request->get('phonecode');
+        if($this->checkMsgCode($phone, $phoneCode)) {
+            $data = array('status' => 1, 'msg' => 'success');
+        } else {
+            $data = array('status' => 0, 'msg' => 'phone code is failed');
+        }
+        $this->dataPrint($data);
+    }
 
     public function getAccessToken()
     {
         $key = 'CYN6LEYUSZ2HJE2F';
-    		$iv = 'URY6L8JA4WN2SEJL';
-    		$return = file_get_contents('http://tomfordwechat.samesamechina.com/wechat/retrieve/access_token/CYN6LEYUSZ2HJE2F');
-    		$return = json_decode($return);
-    		var_dump($return);
-    		if($return->status == 'success') {
-      			$string = base64_decode($return->data, TRUE);
-      			$access_token = $this->aes128_cbc_decrypt($key, $string, $iv);
-      			var_dump($access_token);exit;
-      			return $access_token;
-    		} else {
-  			    return FALSE;
-    		}
+        $iv = 'URY6L8JA4WN2SEJL';
+        $return = file_get_contents('http://tomfordwechat.samesamechina.com/wechat/retrieve/access_token/CYN6LEYUSZ2HJE2F');
+        $return = json_decode($return);
+        if($return->status == 'success') {
+            $string = base64_decode($return->data, TRUE);
+            $access_token = $this->aes128_cbc_decrypt($key, $string, $iv);
+            return $access_token;
+        } else {
+            return FALSE;
+        }
+    }
+
+    private function sendTmp($openid, $tmpid, $name, $phone)
+    {
+        $data = array(
+          'touser' => $openid,
+          'template_id' => $tmpid,
+          'data' => array(
+              'first' => array(
+                  'value' => 'tomford预约信息',
+                  'color' => '#173177',
+              ),
+              'keyword1' => array(
+                  'value' => $name,
+                  'color' => '#173177',
+              ),
+              'keyword2' => array(
+                  'value' => $phone,
+                  'color' => '#173177',
+              ),
+              'keyword3' => array(
+                  'value' => '12312312',
+                  'color' => '#173177',
+              ),
+              'keyword4' => array(
+                  'value' => '2017-10-27 am',
+                  'color' => '#173177',
+              ),
+              'keyword5' => array(
+                  'value' => '领取小样',
+                  'color' => '#173177',
+              ),
+              'remark' => array(
+                  'value' => '请在指定时间前来',
+                  'color' => '#173177',
+              ),
+          ),
+        );
+        $applink = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=%s";
+        $url = sprintf($applink, $this->accessToken);
+        $rs = $this->postData($url, json_encode($data, JSON_UNESCAPED_UNICODE));
+        return $rs;
+    }
+
+    private function sndSMS($moblie)
+    {
+        $ch = curl_init();
+        $apikey = "b42c77ce5a2296dcc0199552012a4bd9";
+        $text = "【Kenzo凯卓】您已成功预约领取小样！";
+        $data = array(
+          'text' => $text,
+          'apikey' => $apikey,
+          'mobile' => $moblie,
+        );
+        curl_setopt ($ch, CURLOPT_URL, 'https://sms.yunpian.com/v2/sms/single_send.json');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
+        $json_data = curl_exec($ch);
+        $array = json_decode($json_data,true);
+        // var_dump($array);exit;
+        $data = array('status' => 1, 'msg' => 'send ok');
+        $this->dataPrint($data);
     }
 
     public function aes128_cbc_decrypt($key, $data, $iv)
@@ -108,6 +188,8 @@ class ApiController extends Controller
         );
         $applyId = $this->helper->insertTable('apply', $apply);
         if($applyId) {
+            // $this->sndSMS($phone);
+            $this->sendTmp($user->openid, '1azK4E7bIRlCxQ6Rd9xqeKYoMME8m-CCWrDPqYSyIUI', $name, $phone);
             $data = array('status' => 1, 'msg' => 'apply success');
             $this->dataPrint($data);
         } else {
@@ -200,30 +282,10 @@ class ApiController extends Controller
     }
 
     /**
-     * 验证短信验证码
-     */
-    public function checkPhoneCodeAction()
-    {
-        $request = $this->request;
-        $fields = array(
-            'phone' => array('cellphone', '121'),
-            'phonecode' => array('notnull', '120'),
-        );
-        $request->validation($fields);
-        $phone = $request->request->get('phone');
-        $phoneCode = $request->request->get('phonecode');
-        if($this->checkMsgCode($phone, $phoneCode)) {
-            $data = array('status' => 1, 'msg' => 'success');
-        } else {
-            $data = array('status' => 0, 'msg' => 'phone code is failed');
-        }
-        $this->dataPrint($data);
-    }
-
-    /**
      *  判断手机验证码是否正确
      */
-    private function checkMsgCode($mobile, $msgCode) {
+    private function checkMsgCode($mobile, $msgCode)
+    {
         $RedisAPI = new Redis();
         $code = $RedisAPI->get($mobile);
         if($code == $msgCode) {
@@ -233,4 +295,16 @@ class ApiController extends Controller
         }
     }
 
+    private function postData($url, $post_json)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json; charset=utf-8"));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_json);
+        $data = curl_exec($ch);
+        curl_close($ch);
+        return json_decode($data);
+    }
 }
