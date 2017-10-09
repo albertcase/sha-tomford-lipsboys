@@ -12,18 +12,48 @@ use \Lib\Captcher;
 
 class ApiController extends Controller
 {
-    public function __construct() {
+    private $_pdo;
+    private $helper;
+    private $accessToken;
 
-   	global $user;
-
+    public function __construct()
+    {
+   	    global $user;
         parent::__construct();
-
         if(!$user->uid) {
             $this->statusPrint('100', 'access deny!');
         }
         $this->_pdo = PDO::getInstance();
         $this->helper = new Helper();
+        $this->accessToken = $this->getAccessToken();
     }
+
+
+    public function getAccessToken()
+    {
+        $key = 'CYN6LEYUSZ2HJE2F';
+    		$iv = 'URY6L8JA4WN2SEJL';
+    		$return = file_get_contents('http://tomfordwechat.samesamechina.com/wechat/retrieve/access_token/CYN6LEYUSZ2HJE2F');
+    		$return = json_decode($return);
+    		var_dump($return);
+    		if($return->status == 'success') {
+      			$string = base64_decode($return->data, TRUE);
+      			$access_token = $this->aes128_cbc_decrypt($key, $string, $iv);
+      			var_dump($access_token);exit;
+      			return $access_token;
+    		} else {
+  			    return FALSE;
+    		}
+    }
+
+    public function aes128_cbc_decrypt($key, $data, $iv)
+    {
+    	  if(16 !== strlen($key)) $key = hash('MD5', $key, true);
+    	  if(16 !== strlen($iv)) $iv = hash('MD5', $iv, true);
+    	  $data = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $data, MCRYPT_MODE_CBC, $iv);
+    	  $padding = ord($data[strlen($data) - 1]);
+    	  return substr($data, 0, -$padding);
+	 }
 
     public function applyListAction()
     {
