@@ -29,6 +29,72 @@ class ApiController extends Controller
     }
 
     /**
+     * 预约场次
+     */
+    public function applyAction()
+    {
+        global $user;
+
+        //判断是否已经预约过
+        if($this->checkUserApply()) {
+            $data = array('status' => 3, 'msg' => 'apply again');
+            $this->dataPrint($data);
+        }
+
+        $request = $this->request;
+        $fields = array(
+            'name' => array('notnull', '120'),
+            'phone' => array('cellphone', '121'),
+            'timeslot' => array('notnull', '120'),
+        );
+        $request->validation($fields);
+        $name = $request->request->get('name');
+        $phone = $request->request->get('phone');
+        $timeslot = $request->request->get('timeslot');
+        //检查场次是否已经预约名额已满
+        if($this->checkApplyAlow($timeslot)) {
+            $data = array('status' => 2, 'msg' => 'apply num is null');
+            $this->dataPrint($data);
+        }
+
+        $apply = array(
+            'uid' => $user->uid,
+            'name' => $name,
+            'timeslot' => $timeslot,
+            'phone' => $phone,
+            'created' => date('Y-m-d H:i:s'),
+        );
+        $applyId = $this->helper->insertTable('apply', $apply);
+        if($applyId) {
+            // $this->sndSMS($phone);
+            $this->sendTmp($user->openid, '1azK4E7bIRlCxQ6Rd9xqeKYoMME8m-CCWrDPqYSyIUI', $name, $phone);
+            $data = array('status' => 1, 'msg' => 'apply success');
+            $this->dataPrint($data);
+        } else {
+            $data = array('status' => 0, 'msg' => 'apply failed');
+            $this->dataPrint($data);
+        }
+    }
+
+    /**
+     * 获取预约场次列表
+     */
+    public function applyListAction()
+    {
+        $sql = "SELECT `id`, `name`, `num`  FROM `timeslot_list`";
+        $query = $this->_pdo->prepare($sql);
+        $query->execute();
+        $list = $query->fetchAll(\PDO::FETCH_ASSOC);
+        if($list) {
+            $data = array('status' => 1, 'msg' => 'get apply list success', 'data' => $list);
+            $this->dataPrint($data);
+        } else {
+            $data = array('status' => 0, 'msg' => 'get apply list failed');
+            $this->dataPrint($data);
+        }
+    }
+
+    /**
      * 验证短信验证码
      */
     public function checkPhoneCodeAction()
@@ -49,6 +115,9 @@ class ApiController extends Controller
         $this->dataPrint($data);
     }
 
+    /**
+     * 获取WECHAT平台的 ACCESS TOKEN
+     */
     public function getAccessToken()
     {
         $key = 'CYN6LEYUSZ2HJE2F';
@@ -64,6 +133,9 @@ class ApiController extends Controller
         }
     }
 
+    /**
+     * 发送模版消息
+     */
     private function sendTmp($openid, $tmpid, $name, $phone)
     {
         $data = array(
@@ -106,6 +178,9 @@ class ApiController extends Controller
         return $rs;
     }
 
+    /**
+     * 发送短信提醒
+     */
     private function sndSMS($moblie)
     {
         $ch = curl_init();
@@ -126,6 +201,13 @@ class ApiController extends Controller
         $this->dataPrint($data);
     }
 
+    /**
+     * TOKEN 解密
+     * @param $key
+     * @param $data
+     * @param $iv
+     * @return bool|string
+     */
     public function aes128_cbc_decrypt($key, $data, $iv)
     {
     	  if(16 !== strlen($key)) $key = hash('MD5', $key, true);
@@ -133,69 +215,6 @@ class ApiController extends Controller
     	  $data = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $data, MCRYPT_MODE_CBC, $iv);
     	  $padding = ord($data[strlen($data) - 1]);
     	  return substr($data, 0, -$padding);
-	 }
-
-    public function applyListAction()
-    {
-        $sql = "SELECT `id`, `name`, `num`  FROM `timeslot_list`";
-        $query = $this->_pdo->prepare($sql);
-        $query->execute();
-        $list = $query->fetchAll(\PDO::FETCH_ASSOC);
-        if($list) {
-            $data = array('status' => 1, 'msg' => 'get apply list success', 'data' => $list);
-            $this->dataPrint($data);
-        } else {
-            $data = array('status' => 0, 'msg' => 'get apply list failed');
-            $this->dataPrint($data);
-        }
-    }
-
-    /*
-     * 预约场次
-     */
-    public function applyAction()
-    {
-        global $user;
-
-        //判断是否已经预约过
-        if($this->checkUserApply()) {
-            $data = array('status' => 3, 'msg' => 'apply again');
-            $this->dataPrint($data);
-        }
-
-        $request = $this->request;
-        $fields = array(
-          'name' => array('notnull', '120'),
-          'phone' => array('cellphone', '121'),
-          'timeslot' => array('notnull', '120'),
-        );
-        $request->validation($fields);
-        $name = $request->request->get('name');
-        $phone = $request->request->get('phone');
-        $timeslot = $request->request->get('timeslot');
-        //检查场次是否已经预约名额已满
-        if($this->checkApplyAlow($timeslot)) {
-            $data = array('status' => 2, 'msg' => 'apply num is null');
-            $this->dataPrint($data);
-        }
-
-        $apply = array(
-            'uid' => $user->uid,
-            'name' => $name,
-            'timeslot' => $timeslot,
-            'phone' => $phone,
-            'created' => date('Y-m-d H:i:s'),
-        );
-        $applyId = $this->helper->insertTable('apply', $apply);
-        if($applyId) {
-            // $this->sndSMS($phone);
-            $this->sendTmp($user->openid, '1azK4E7bIRlCxQ6Rd9xqeKYoMME8m-CCWrDPqYSyIUI', $name, $phone);
-            $data = array('status' => 1, 'msg' => 'apply success');
-            $this->dataPrint($data);
-        } else {
-          $data = array('status' => 0, 'msg' => 'apply failed');
-          $this->dataPrint($data);
-        }
     }
 
     /**
@@ -212,6 +231,11 @@ class ApiController extends Controller
         }
     }
 
+    /**
+     * 通过场次ID查找预约场次信息
+     * @param $timeslot
+     * @return int
+     */
     private function findTimeslotByID($timeslot)
     {
         global $user;
@@ -242,7 +266,7 @@ class ApiController extends Controller
     }
 
     /**
-     * 查看当前一共抽中多少奖
+     * 通过场次ID去查看一共有多少预约数量
      */
     private function getApplySum($timeslot)
     {
@@ -295,6 +319,12 @@ class ApiController extends Controller
         }
     }
 
+    /**
+     * POST DATA
+     * @param $url
+     * @param $post_json
+     * @return mixed
+     */
     private function postData($url, $post_json)
     {
         $ch = curl_init();
