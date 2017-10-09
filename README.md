@@ -1,7 +1,10 @@
 # SHA-Tomford-Lipsboys API
 
-## 模拟登陆 http://127.0.0.1:9122/wechat/same/callback?openid=1231231&redirect_uri=1231
-
+## 初始化操作
+```
+ 1.生成场次 php /vagrant/scipt/create_applylist.php
+ 2.模拟登陆 http://127.0.0.1:9122/wechat/same/callback?openid=1231231&redirect_uri=1231
+```
 ### 1. 发送短信验证码API
 
 Method: POST
