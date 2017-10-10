@@ -1620,33 +1620,12 @@ Api = {
     //    address: '湖滨路'
     //}
     //Form submit of the freetrial
-    submitForm_freetrial:function(obj,callback){
-        Common.msgBox.add('loading...');
-        $.ajax({
-            url:'/api/giftinfo',
-            type:'POST',
-            dataType:'json',
-            data:obj,
-            success:function(data){
-                Common.msgBox.remove();
-                return callback(data);
-                //status=1 有库存
-            }
-        });
-
-        //return callback({
-        //    status:0,
-        //    msg:'fillform'
-        //})
-
-
-    },
 
     //Form submit of the luckydraw
-    submitForm_luckydraw:function(obj,callback){
+    submitForm_apply:function(obj,callback){
         Common.msgBox.add('loading...');
         $.ajax({
-            url:'/api/lotteryinfo',
+            url:'/api/apply',
             type:'POST',
             dataType:'json',
             data:obj,
@@ -1665,82 +1644,20 @@ Api = {
 
     },
 
-    //抽奖API
-    lottery:function(callback){
-        Common.msgBox.add('抽奖中...');
-        $.ajax({
-            url:'/api/lottery',
-            type:'POST',
-            dataType:'json',
-            success:function(data){
-                Common.msgBox.remove();
-                return callback(data);
-            }
-        });
-
-        //return callback({
-        //    status:1,
-        //    msg:'提交成功'
-        //});
-
-
-    },
-
-    //luckydraw status api===luckydrawstatus
-    luckydrawstatus:function(callback){
+    //Get reservation lists
+    getApplyList:function(obj,callback){
         Common.msgBox.add('loading...');
         $.ajax({
-            url:'/api/luckydrawstatus',
-            type:'POST',
-            dataType:'json',
-            success:function(data){
-                Common.msgBox.remove();
-                return callback(data);
-            }
-        });
-
-
-    },
-
-    getImgValidateCode:function(callback){
-        Common.msgBox.add('loading...');
-        $.ajax({
-            url:'/api/picturecode',
-            type:'POST',
-            dataType:'json',
-            success:function(data){
-                Common.msgBox.remove();
-                return callback(data);
-            }
-        });
-
-        //return callback({
-        //    status:1,
-        //    msg:'提交成功'
-        //});
-
-
-    },
-
-    checkImgValidateCode:function(obj,callback){
-        Common.msgBox.add('loading...');
-        $.ajax({
-            url:'/api/checkpicture',
+            url:'/api/applylist',
             type:'POST',
             dataType:'json',
             data:obj,
             success:function(data){
                 Common.msgBox.remove();
                 return callback(data);
+                //status=1 有库存
             }
         });
-
-        //return callback({
-        //    status:1,
-        //    msg:'提交成功'
-        //});
-
-
     },
 
 
@@ -1750,6 +1667,28 @@ Api = {
         Common.msgBox.add('loading...');
         $.ajax({
             url:'/api/phonecode',
+            type:'POST',
+            dataType:'json',
+            data:obj,
+            success:function(data){
+                Common.msgBox.remove();
+                return callback(data);
+            }
+        });
+
+        //return callback({
+        //    status:1,
+        //    msg:'提交成功'
+        //});
+
+
+    },
+
+    //check message validate code
+    checkMsgValidateCode:function(obj,callback){
+        Common.msgBox.add('loading...');
+        $.ajax({
+            url:'/api/checkphonecode',
             type:'POST',
             dataType:'json',
             data:obj,
@@ -1914,29 +1853,16 @@ Api = {
                     validate = false;
                     Common.errorMsgBox.add('手机号格式错误，请重新输入');
                 }else{
-                    if(!$('#input-validate-code').val()){
-                        Common.alertBox.add('你的验证码不能为空');
-                        return;
-                    }
-                    Api.checkImgValidateCode({
-                        picture:$('#input-validate-code').val()
-                    },function(data){
-                        if(data.status == 1){
-                            //start to count down and sent message to your phone
-                            Api.sendMsgValidateCode({
-                                mobile:$('#input-mobile').val()
-                            },function(json){
-                                if(json.status==1){
-                                    //console.log('开始倒计时');
-                                    self.countDown();
-                                    self.disableClick = true;
-                                }else{
-                                    Common.alertBox.add(json.msg);
-                                }
-                            });
+                    //start to count down and sent message to your phone
+                    Api.sendMsgValidateCode({
+                        mobile:$('#input-mobile').val()
+                    },function(json){
+                        if(json.status==1){
+                            //console.log('开始倒计时');
+                            self.countDown();
+                            self.disableClick = true;
                         }else{
-                            Common.alertBox.add('验证码输入错误，请重新输入');
-                            self.getValidateCode();
+                            Common.alertBox.add(json.msg);
                         }
                     });
                 }
@@ -2037,7 +1963,6 @@ Api = {
         }
         return false;
     };
-
 
     $(document).ready(function(){
 //    show form

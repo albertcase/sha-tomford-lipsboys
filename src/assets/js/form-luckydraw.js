@@ -143,29 +143,16 @@
                     validate = false;
                     Common.errorMsgBox.add('手机号格式错误，请重新输入');
                 }else{
-                    if(!$('#input-validate-code').val()){
-                        Common.alertBox.add('你的验证码不能为空');
-                        return;
-                    }
-                    Api.checkImgValidateCode({
-                        picture:$('#input-validate-code').val()
-                    },function(data){
-                        if(data.status == 1){
-                            //start to count down and sent message to your phone
-                            Api.sendMsgValidateCode({
-                                mobile:$('#input-mobile').val()
-                            },function(json){
-                                if(json.status==1){
-                                    //console.log('开始倒计时');
-                                    self.countDown();
-                                    self.disableClick = true;
-                                }else{
-                                    Common.alertBox.add(json.msg);
-                                }
-                            });
+                    //start to count down and sent message to your phone
+                    Api.sendMsgValidateCode({
+                        mobile:$('#input-mobile').val()
+                    },function(json){
+                        if(json.status==1){
+                            //console.log('开始倒计时');
+                            self.countDown();
+                            self.disableClick = true;
                         }else{
-                            Common.alertBox.add('验证码输入错误，请重新输入');
-                            self.getValidateCode();
+                            Common.alertBox.add(json.msg);
                         }
                     });
                 }
