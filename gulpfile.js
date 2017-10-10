@@ -51,7 +51,7 @@ var path = {
         './src/assets/js/region.js',
         './src/assets/js/common.js',
         './src/assets/js/api.js',
-        './src/assets/js/wxshare.js',
+        //'./src/assets/js/wxshare.js',
         './src/assets/js/form-luckydraw.js',
     ],
     images:[

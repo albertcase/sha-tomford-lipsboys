@@ -6,9 +6,8 @@
         //isSubmit  /*是否提交了用户详细信息表单*/
         //isLuckyDraw /*是否抽奖*/
         //remaintimes /*剩余抽奖次数*/
-        this.user = userInfo;
         this.disableClick = false;
-        this.enableTotalTimes = 1; //说明如果满1次抽奖机会就有权限抽奖了因为是小于号
+        this.timeSlotJson = ['请选择一个时间段','10:00-10:30AM','10:30-11:30AM','11:30AM-12:30PM','12:30PM-13:30PM'];
     };
     //init
     controller.prototype.init = function(){
@@ -83,177 +82,29 @@
         $('.preload').remove();
         $('.wrapper').addClass('fade');
         self.bindEvent();
-        self.showAllProvince();
+        self.showTimeSlot();
         Common.gotoPin(0);
         //self.updateLuckyDrawStatus();
     };
 
-    controller.prototype.updateLuckyDrawStatus = function(){
-        var self = this;
-        Api.luckydrawstatus(function(data){
-            self.user.remaintimes = data.msg.remaintimes;
-            if(data.status==1){
-                if(self.user.isLuckyDraw || !data.msg.remaintimes){
-                    $('.btn-start-luckydraw').addClass('disabled');
-                };
-                if(data.msg.totaltimes<self.enableTotalTimes){
-                    //不符合抽奖条件,直接显示提示信息
-                    Common.gotoPin(3);
-                }else{
-                    //显示首页的状态
-                    self.loadHomePage();
-                }
-                $('.totaldays').html(data.msg.totaldays);
-                $('.totaltimes').html(data.msg.totaltimes);
-                $('.remaintimes').html(data.msg.remaintimes);
-            }
-        });
-    };
-
-    controller.prototype.loadHomePage = function(){
-        var self = this;
-        /*
-         * status1: If the user wins the lottery, but not filled the details form, we need guide them to fill form;
-         * status2: If the user wins the lottery, and filled form, show result page;
-         * status3: If the user fails the win, but still has remain times, continue;
-         * status4: If the user fails the win, and also no chance, we will show the sorry message
-         * */
-        if(self.user.isLuckyDraw && !self.user.isSubmit){
-            Common.gotoPin(0);
-            self.lotteryPop('popup-result-yes','恭喜您','获得KENZO花颜舒柔夜间修护面膜（75ML）一份！'+'<div class="btn btn-goinfo">'+'<span class="tt">填写寄送信息</span>'+'</div>');
-
-            // test
-            //Common.gotoPin(1);
-            //self.lotteryPop('popup-result-yes','恭喜您','获得XXX一份！'+'<div class="btn btn-goinfo">'+'<span class="tt">填写寄送信息</span>'+'</div>');
-        }else if(self.user.isLuckyDraw && self.user.isSubmit){
-            Common.gotoPin(2);
-        }else if(!self.user.isLuckyDraw && self.user.remaintimes){
-            Common.gotoPin(0);
-        }else if(!self.user.isLuckyDraw && !self.user.remaintimes){
-            //很遗憾，您没有中奖！
-            Common.gotoPin(0);
-            $('.lucky-info').html('很遗憾，您没有中奖！');
-            self.lotteryPop('popup-result-no','很遗憾，您没有中奖','请持续关注KENZO官方微信，'+'<br>'+'更多福利等着你哦！');
-        }
-    }
-
     //bind Events
     controller.prototype.bindEvent = function(){
         var self = this;
-
-        /*remove the pop lottery result*/
-        $('body').on('touchstart', '.pop-lottery-result .btn-close',function(){
-            $('.pop-lottery-result').remove();
-        });
-
-        /*Show link-terms popup*/
-        $('.link-terms').on('touchstart', function(){
-            $('.terms-pop').addClass('show');
-        });
-
         /*
-        * Hide link terms pop
-        * */
-        $('.terms-pop .btn-close').on('touchstart', function(){
-            $('.terms-pop').removeClass('show');
-        });
-
-        /*
-        * Start lottery
-        * */
-        $('.btn-start-luckydraw').on('touchstart', function(){
-            _hmt.push(['_trackEvent', 'button', 'click', 'StartToLuckyDraw']);
-            if($('.btn-start-luckydraw').hasClass('disabled')) return;
-            Api.lottery(function(data){
-                //self.updateLuckyDrawStatus();
-                switch (data.status){
-                    case 0:
-                        //msg: '遗憾未中奖',
-                        Api.luckydrawstatus(function(json){
-                            self.user.remaintimes = json.msg.remaintimes;
-                            if(json.status==1){
-                                if(self.user.isLuckyDraw || !json.msg.remaintimes){
-                                    $('.btn-start-luckydraw').addClass('disabled');
-                                };
-                                if(!self.user.remaintimes){
-                                    $('.lucky-info').html('很遗憾，您没有中奖！');
-                                    self.lotteryPop('popup-result-no','很遗憾，您没有中奖','请持续关注KENZO官方微信，'+'<br>'+'更多福利等着你哦！');
-                                }else{
-                                    $('.lucky-info').html('很遗憾，您没有中奖！<br>再次点击“抽奖”试试看吧！');
-                                }
-                                $('.remaintimes').html(json.msg.remaintimes);
-                            }else{
-                                Common.alertBox.add(json.msg);
-                            }
-                        });
-                        break;
-                    case 1:
-                        //msg: '恭喜中奖'
-                        self.lotteryPop('popup-result-yes','恭喜您','获得KENZO花颜舒柔夜间修护面膜（75ML）一份！'+'<div class="btn btn-goinfo">'+'<span class="tt">填写寄送信息</span>'+'</div>');
-                        break;
-                    case 2:
-                        //msg: '今天的奖品已经发没！',
-                        Api.luckydrawstatus(function(json){
-                            self.user.remaintimes = json.msg.remaintimes;
-                            if(json.status==1){
-                                if(self.user.isLuckyDraw || !json.msg.remaintimes){
-                                    $('.btn-start-luckydraw').addClass('disabled');
-                                };
-                                if(!self.user.remaintimes){
-                                    $('.lucky-info').html('很遗憾，您没有中奖！');
-                                    self.lotteryPop('popup-result-no','很遗憾，您没有中奖','请持续关注KENZO官方微信，'+'<br>'+'更多福利等着你哦！');
-                                }else{
-                                    $('.lucky-info').html('很遗憾，您没有中奖！<br>再次点击“抽奖”试试看吧！');
-                                }
-                                $('.remaintimes').html(json.msg.remaintimes);
-                            }else{
-                                Common.alertBox.add(json.msg);
-                            }
-                        });
-                        //self.lotteryPop('popup-result-no','很遗憾，您没有中奖','请持续关注KENZO官方微信，'+'<br>'+'更多福利等着你哦！');
-                        break;
-                    case 3:
-                        //msg: '您已获奖',
-                        self.lotteryPop('popup-result-yes','恭喜您','获得KENZO花颜舒柔夜间修护面膜（75ML）一份！'+'<div class="btn btn-goinfo">'+'<span class="tt">填写寄送信息</span>'+'</div>');
-                        break;
-                    default :
-                        Common.alertBox.add(data.msg);
-                }
-            });
-        });
-
-        /*
-        * Go form info page
-        * */
-        $('body').on('touchstart', '.btn-goinfo', function(){
-            self.loadFormPage();
-            $('.pop-lottery-result').remove();
-        });
-
-        /*
-         * submit the form of luckydraw
-         * if isTransformedOld is true, submit it and then call lottery api
-         * if isTransformedOld is false, submit it and then call gift api
+         * submit the form
          * */
         $('.btn-submit').on('touchstart',function(){
-            _hmt.push(['_trackEvent', 'button', 'click', 'submitLuckyDrawForm']);
             if(self.validateForm()){
                 //name mobile province city area address
                 var inputNameVal = $('#input-name').val(),
                     inputMobileVal = $('#input-mobile').val(),
-                    inputAddressVal = $('#input-address').val(),
                     inputMsgCodeVal = $('#input-validate-message-code').val(),
-                    selectProvinceVal = $('#select-province').val(),
-                    selectCityVal = $('#select-city').val(),
-                    selectDistrictVal = $('#select-district').val();
+                    selectTimeSlotVal = $('#select-timeslot').val();
                 Api.submitForm_luckydraw({
                     name:inputNameVal,
                     mobile:inputMobileVal,
-                    province:selectProvinceVal,
-                    city:selectCityVal,
-                    msgCode:inputMsgCodeVal,
-                    area:selectDistrictVal,
-                    address:inputAddressVal
+                    timeslot:selectTimeSlotVal,
+                    msgCode:inputMsgCodeVal
                 },function(data){
                     if(data.status==1){
                         Common.gotoPin(2);
@@ -267,23 +118,10 @@
 
         //    switch the province
         var curProvinceIndex = 0;
-        $('#select-province').on('change',function(){
-            curProvinceIndex = document.getElementById('select-province').selectedIndex;
-            self.showCity(curProvinceIndex);
+        $('#select-timeslot').on('change',function(){
+            //curProvinceIndex = document.getElementById('select-timeslot').selectedIndex;
+            $('#input-text-timeslot').val($(this).val());
         });
-
-        $('#select-city').on('change',function(){
-            var curCityIndex = document.getElementById('select-city').selectedIndex;
-            self.showDistrict(curProvinceIndex,curCityIndex);
-        });
-
-        $('#select-district').on('change',function(){
-            var districtInputEle = $('#input-text-district'),
-                districtSelectEle = $('#select-district');
-            var curCityIndex = document.getElementById('select-district').selectedIndex;
-            districtInputEle.val(districtSelectEle.val());
-        });
-
 
         //    imitate share function on pc====test
         //    $('.share-popup .guide-share').on('touchstart',function(){
@@ -414,19 +252,19 @@
 
 
     //province city and district
-    controller.prototype.showAllProvince = function(){
+    controller.prototype.showTimeSlot = function(){
         var self = this;
         //    list all province
-        var provinces = '';
-        var provinceSelectEle = $('#select-province'),
+        var timeSlots = '';
+        var timeslotSelectEle = $('#select-timeslot'),
             provinceInputEle = $('#input-text-province');
-        region.forEach(function(item){
-            provinces = provinces+'<option value="'+item.name+'">'+item.name+'</option>';
+        self.timeSlotJson.forEach(function(item){
+            timeSlots = timeSlots+'<option value="'+item+'">'+item+'</option>';
         });
-        provinceSelectEle.html(provinces);
-        provinceInputEle.val(provinceSelectEle.val());
-        self.showCity(0);
-        self.showDistrict(0,0);
+        timeslotSelectEle.html(timeSlots);
+        //provinceInputEle.val(provinceSelectEle.val());
+        //self.showCity(0);
+        //self.showDistrict(0,0);
     };
 
     controller.prototype.showCity = function(curProvinceId){
@@ -469,11 +307,8 @@
         var self = this;
         var validate = true,
             inputName = document.getElementById('input-name'),
-            inputMobile = document.getElementById('input-mobile'),
-            inputAddress = document.getElementById('input-address'),
-            selectProvince = document.getElementById('select-province'),
-            selectCity = document.getElementById('select-city'),
-            selectDistrict = document.getElementById('select-district');
+            inputMobile = document.getElementById('input-mobile')
+            selectTimeSlot = document.getElementById('select-timeslot');
 
         if(!inputName.value){
             Common.errorMsgBox.add('请填写姓名');
@@ -495,28 +330,12 @@
             }
         }
 
-        if(!selectProvince.value || selectProvince.value == '省份'){
+        if(!selectTimeSlot.value || selectTimeSlot.value == self.timeSlotJson[0]){
             //Common.errorMsg.add(selectProvince.parentElement,'请选择省份');
-            Common.errorMsgBox.add('请选择省份');
+            Common.errorMsgBox.add('请选择一个时间段');
             validate = false;
         }else{
             //Common.errorMsg.remove(selectProvince.parentElement);
-        };
-
-        if(!selectCity.value || selectCity.value == '城市' || !selectDistrict.value || selectDistrict.value == '区县' ){
-            //Common.errorMsg.add(selectCity.parentElement.parentElement,'请选择城市和区县');
-            Common.errorMsgBox.add('请选择城市和区县');
-            validate = false;
-        }else{
-            //Common.errorMsg.remove(selectCity.parentElement);
-        };
-
-        if(!inputAddress.value){
-            //Common.errorMsg.add(inputAddress.parentElement,'请填写地址');
-            Common.errorMsgBox.add('请填写地址');
-            validate = false;
-        }else{
-            //Common.errorMsg.remove(inputAddress.parentElement);
         };
 
         if(validate){
