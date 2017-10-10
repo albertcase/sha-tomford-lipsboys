@@ -25,7 +25,7 @@ define("AHEADTIME", '1000');
 
 define("NONCESTR", '?????');
 define("COACH_AUTH_URL", '???');
-define("SAME_OAUTH_URL", '???');
+define("SAME_OAUTH_URL", 'http://tomfordwechat.samesamechina.com/v1/wx/web/oauth2/authorize');
 
 //Redis config info
 define("REDIS_HOST", '127.0.0.1');
@@ -40,7 +40,7 @@ define("DBNAME", 'tomford_lipsboys');
 
 //Wechat Authorize
 define("CALLBACK", '???');
-define("SCOPE", '???');
+define("SCOPE", 'snsapi_base');
 
 //Wechat Authorize Page
 define("AUTHORIZE_URL", '[

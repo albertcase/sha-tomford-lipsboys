@@ -66,7 +66,7 @@ class ApiController extends Controller
         );
         $applyId = $this->helper->insertTable('apply', $apply);
         if($applyId) {
-            // $this->sndSMS($phone);
+            $this->sndSMS($phone);
             $this->sendTmp($user->openid, '1azK4E7bIRlCxQ6Rd9xqeKYoMME8m-CCWrDPqYSyIUI', $name, $phone);
             $data = array('status' => 1, 'msg' => 'apply success');
             $this->dataPrint($data);
@@ -196,10 +196,22 @@ class ApiController extends Controller
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
         $json_data = curl_exec($ch);
-        $array = json_decode($json_data,true);
-        // var_dump($array);exit;
-        $data = array('status' => 1, 'msg' => 'send ok');
-        $this->dataPrint($data);
+        $res= json_decode($json_data,true);
+        if($res['code'] == 0) {
+            $smsStatus = 'success';
+        } else {
+            $smsStatus = 'failed';
+        }
+
+        //记录短信发送日志
+        $smsLog = new \stdClass();
+        $smsLog->type = 'applynotice';
+        $smsLog->status = $smsStatus;
+        $smsLog->api_data = json_encode($data);
+        $smsLog->contents = $text;
+        $smsLog->api_return = $json_data;
+        $this->insertSMSLogs($smsLog);
+        return true;
     }
 
     /**
@@ -300,9 +312,33 @@ class ApiController extends Controller
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
         $json_data = curl_exec($ch);
-        $array = json_decode($json_data,true);
+        $res = json_decode($json_data,true);
+        if($res['code'] == 0) {
+            $smsStatus = 'success';
+        } else {
+            $smsStatus = 'failed';
+        }
+
+        //记录短信发送日志
+        $smsLog = new \stdClass();
+        $smsLog->type = 'phonecode';
+        $smsLog->status = $smsStatus;
+        $smsLog->api_data = json_encode($data);
+        $smsLog->contents = $text;
+        $smsLog->api_return = $json_data;
+        $this->insertSMSLogs($smsLog);
+
         $data = array('status' => 1, 'msg' => 'send ok');
         $this->dataPrint($data);
+    }
+
+    private function insertSMSLogs($logs)
+    {
+        global $user;
+        $logs->uid = $user->uid;
+        $logs->created = date('Y-m-d H:i:s');
+        $log = (array) $logs;
+        $this->helper->insertTable('sms_logs', $log);
     }
 
     /**
