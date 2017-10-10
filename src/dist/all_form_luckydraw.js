@@ -1894,11 +1894,6 @@ Api = {
             $('#input-text-timeslot').val($(this).val());
         });
 
-        //    imitate share function on pc====test
-        //    $('.share-popup .guide-share').on('touchstart',function(){
-        //        self.shareSuccess();
-        //    });
-
         //switch validate code
         $('.validate-code').on('touchstart', function(){
             self.getValidateCode();
@@ -1963,29 +1958,6 @@ Api = {
 
 
     /*
-    * Lottery result popup
-    * */
-    controller.prototype.lotteryPop = function(id,title,des){
-        var lotteryHtml = '<div class="popup pop-lottery-result show" id="'+id+'">'+
-            '<div class="inner">'+
-            '<div class="f-2"></div>'+
-            '<div class="msg">'+
-            '<div class="f-1"></div>'+
-            '<div class="f-3"></div>'+
-            '<div class="result-content">'+
-            '<h3 class="subtitle">'+
-            '<span>'+title+'</span>'+
-            '</h3>'+
-            '<div class="des">'+des+'</div>'+
-            '</div>'+
-            '</div>'+
-            '<div class="btn-close">关闭</div>'+
-            '</div>'+
-            '</div>';
-        $('body').append(lotteryHtml);
-    };
-
-    /*
      * Countdown
      * Disabled click the button untill the end the countdown
      * */
@@ -2007,20 +1979,6 @@ Api = {
         },1000);
     };
 
-    controller.prototype.getValidateCode = function(){
-        Api.getImgValidateCode(function(data){
-            //console.log(data);
-            if(data.status==1){
-                $('.validate-code-img').html('<img src="data:image/jpeg;base64,'+data.picture+'" />');
-                //var codeImg = new Image();
-                //codeImg.onload = function(){
-                //
-                //}
-                //codeImg.src = data.picture;
-            }
-        });
-    };
-
 
     //province city and district
     controller.prototype.showTimeSlot = function(){
@@ -2036,41 +1994,6 @@ Api = {
         //provinceInputEle.val(provinceSelectEle.val());
         //self.showCity(0);
         //self.showDistrict(0,0);
-    };
-
-    controller.prototype.showCity = function(curProvinceId){
-        var self = this;
-        //    show current cities
-        var cities='';
-        var provinceSelectEle = $('#select-province'),
-            provinceInputEle = $('#input-text-province'),
-            citySelectEle = $('#select-city'),
-            cityInputEle = $('#input-text-city');
-        var cityJson = region[curProvinceId].city;
-        cityJson.forEach(function(item,index){
-            cities = cities + '<option data-id="'+index+'" value="'+item.name+'">'+item.name+'</option>';
-        });
-        citySelectEle.html(cities);
-        provinceInputEle.val(provinceSelectEle.val());
-        cityInputEle.val(citySelectEle.val());
-        self.showDistrict(curProvinceId,0);
-    };
-
-    controller.prototype.showDistrict = function(curProvinceId,curCityId){
-        var self = this;
-        var districtSelectEle = $('#select-district'),
-            districtInputEle = $('#input-text-district'),
-            citySelectEle = $('#select-city'),
-            cityInputEle = $('#input-text-city');
-        //    show current districts
-        var districts = '';
-        var districtJson = region[curProvinceId].city[curCityId].area;
-        districtJson.forEach(function(item,index){
-            districts = districts + '<option data-id="'+index+'" value="'+item+'">'+item+'</option>';
-        });
-        cityInputEle.val(citySelectEle.val());
-        districtSelectEle.html(districts);
-        districtInputEle.val(districtSelectEle.val());
     };
 
     //validation the form
@@ -2113,12 +2036,6 @@ Api = {
             return true;
         }
         return false;
-    };
-    controller.prototype.loadFormPage = function(){
-        var self = this;
-        self.getValidateCode();
-        Common.gotoPin(1);
-
     };
 
 
