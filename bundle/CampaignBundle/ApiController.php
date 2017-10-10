@@ -141,6 +141,7 @@ class ApiController extends Controller
         $data = array(
           'touser' => $openid,
           'template_id' => $tmpid,
+          'topcolor' => "#FF0000",
           'data' => array(
               'first' => array(
                   'value' => 'tomford预约信息',
@@ -172,8 +173,8 @@ class ApiController extends Controller
               ),
           ),
         );
-        $applink = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=%s";
-        $url = sprintf($applink, $this->accessToken);
+        $applink = "http://tomfordwechat.samesamechina.com/v2/wx/template/send?access_token=%s";
+        $url = sprintf($applink, '184fffde-60fd-4779-a767-c4de49f1cdff');
         $rs = $this->postData($url, json_encode($data, JSON_UNESCAPED_UNICODE));
         return $rs;
     }
@@ -238,7 +239,6 @@ class ApiController extends Controller
      */
     private function findTimeslotByID($timeslot)
     {
-        global $user;
         $sql = "SELECT `name`, `num` FROM `timeslot_list` WHERE `id` = :id";
         $query = $this->_pdo->prepare($sql);
         $query->execute(array(':id' => $timeslot));
