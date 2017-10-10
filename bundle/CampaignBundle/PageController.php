@@ -18,9 +18,8 @@ class PageController extends Controller
 
     public function indexAction()
     {
-        echo 'tomfordlipsboys';exit;
         $config = array();
-        return $this->render('index', array('config' => $config));
+        return $this->render('luckydraw', array('config' => $config));
     }
 
 	  public function clearCookieAction()
