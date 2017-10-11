@@ -33,21 +33,11 @@ class ApiController extends Controller
     public function applyAction()
     {
         global $user;
-
         //判断是否已经预约过
         if($this->checkUserApply()) {
             $data = array('status' => 3, 'msg' => 'apply again');
             $this->dataPrint($data);
         }
-
-//        $redis = new Redis();
-//        $redis->connect('127.0.0.1', '6379');
-//        $key = "checkin:{$user->openid}";
-//        if(!$redis->get($key)) {
-//            $redis->set($key, 1);
-//            $redis->setTimeout($key, 60);
-//        }
-
         $request = $this->request;
         $fields = array(
             'name' => array('notnull', '120'),
@@ -58,28 +48,61 @@ class ApiController extends Controller
         $name = $request->request->get('name');
         $phone = $request->request->get('phone');
         $timeslot = $request->request->get('timeslot');
-        //检查场次是否已经预约名额已满
-        if($this->checkApplyAlow($timeslot)) {
-            $data = array('status' => 2, 'msg' => 'apply num is null');
+
+        //预约高并发处理
+        $redis = new Redis();
+        $key = "apply:{$user->openid}";
+        if(!$redis->get($key)) {
+            $redis->set($key, 1); //进程锁定一分钟
+            $redis->setTimeout($key, 10);
+            //场次无名额
+            if($redis->hGet('quality', $timeslot) <= 0) {
+                $data = array('status' => 2, 'msg' => 'apply num is null');
+                $this->dataPrint($data);
+            }
+            //库存减成功
+            if($this->inCreateCountNum($timeslot)) {
+                $apply = array(
+                    'uid' => $user->uid,
+                    'name' => $name,
+                    'timeslot' => $timeslot,
+                    'phone' => $phone,
+                    'created' => date('Y-m-d H:i:s'),
+                );
+                $applyId = $this->helper->insertTable('apply', $apply);
+                if($applyId) {
+                    $this->sndSMS($phone);
+                    $this->sendTmp($user->openid, '1azK4E7bIRlCxQ6Rd9xqeKYoMME8m-CCWrDPqYSyIUI', $name, $phone);
+                    $data = array('status' => 1, 'msg' => 'apply success');
+                    $this->dataPrint($data);
+                } else { //TODO 高并发的情况下预约失败 是否再库存加回来 ？
+                    $data = array('status' => 0, 'msg' => 'apply failed');
+                    $this->dataPrint($data);
+                }
+            } else {
+                $data = array('status' => 2, 'msg' => 'apply num is null');
+                $this->dataPrint($data);
+            }
+        } else {
+            $data = array('status' => 3, 'msg' => 'you is applying');
             $this->dataPrint($data);
         }
+    }
 
-        $apply = array(
-            'uid' => $user->uid,
-            'name' => $name,
-            'timeslot' => $timeslot,
-            'phone' => $phone,
-            'created' => date('Y-m-d H:i:s'),
-        );
-        $applyId = $this->helper->insertTable('apply', $apply);
-        if($applyId) {
-            $this->sndSMS($phone);
-            $this->sendTmp($user->openid, '1azK4E7bIRlCxQ6Rd9xqeKYoMME8m-CCWrDPqYSyIUI', $name, $phone);
-            $data = array('status' => 1, 'msg' => 'apply success');
-            $this->dataPrint($data);
+
+    /**
+     * 写入预约剩余名额
+     * 如果已经为0不做处理
+     */
+    private function inCreateCountNum($key, $num = -1) {
+        $redis = new Redis();
+        if($redis->hGet('quality', $key) <= 0) {
+            return false;
+        }
+        if($redis->hInCrby('quality', $key, $num)) {
+            return true;
         } else {
-            $data = array('status' => 0, 'msg' => 'apply failed');
-            $this->dataPrint($data);
+            return false;
         }
     }
 
@@ -253,37 +276,6 @@ class ApiController extends Controller
     }
 
     /**
-     * 判断当前场次是否还有预约名额
-     */
-    private function checkApplyAlow($timeslot)
-    {
-        $nowApplyNum = $this->getApplySum($timeslot);
-        $sumApplyNum = $this->findTimeslotByID($timeslot);
-        if($nowApplyNum < $sumApplyNum) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    /**
-     * 通过场次ID查找预约场次信息
-     * @param $timeslot
-     * @return int
-     */
-    private function findTimeslotByID($timeslot)
-    {
-        $sql = "SELECT `name`, `num` FROM `timeslot_list` WHERE `id` = :id";
-        $query = $this->_pdo->prepare($sql);
-        $query->execute(array(':id' => $timeslot));
-        $row = $query->fetch(\PDO::FETCH_ASSOC);
-        if($row) {
-            return (int) $row['num'];
-        }
-        return 0;
-    }
-
-    /**
      * 验证当前用户是否已经预约过
      */
     private function checkUserApply()
@@ -297,18 +289,6 @@ class ApiController extends Controller
             return 1;
         }
         return 0;
-    }
-
-    /**
-     * 通过场次ID去查看一共有多少预约数量
-     */
-    private function getApplySum($timeslot)
-    {
-        $sql = "select count(id) AS sum from apply where `timeslot` = :timeslot";
-        $query = $this->_pdo->prepare($sql);
-        $query->execute(array(':timeslot' => $timeslot));
-        $row = $query->fetch(\PDO::FETCH_ASSOC);
-        return (int) $row['sum'];
     }
 
     /**

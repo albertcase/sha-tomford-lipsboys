@@ -87,12 +87,12 @@ Method: POST
 domian/api/apply
 ```
 ##### POST Parameter
-name=pm&timeslot=1&phone=13112311231
+name=pm&timeslot=2017-10-21 am&phone=13112311231
 
 ```javascript
 {
     name: pm
-    timeslot: 1
+    timeslot: 2017-10-21 am
     phone: 13112311231
 }
 ```
@@ -164,8 +164,8 @@ null
 status: '1',
 msg: 'get apply list success',
 data: [
-  {"id":1,"name":'2017-10-21 am',"num":2},
-  {"id":2,"name":"2017-10-21 pm","num":0}
+  {"name":'2017-10-21 am', "num":2},
+  {"name":"2017-10-21 pm", "num":0}
 ]
 }
 ```
