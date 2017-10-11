@@ -8,7 +8,6 @@ use Lib\PDO;
 use Lib\UserAPI;
 use Lib\WechatAPI;
 use \Lib\Redis;
-use \Lib\Captcher;
 
 class ApiController extends Controller
 {
@@ -40,6 +39,14 @@ class ApiController extends Controller
             $data = array('status' => 3, 'msg' => 'apply again');
             $this->dataPrint($data);
         }
+
+//        $redis = new Redis();
+//        $redis->connect('127.0.0.1', '6379');
+//        $key = "checkin:{$user->openid}";
+//        if(!$redis->get($key)) {
+//            $redis->set($key, 1);
+//            $redis->setTimeout($key, 60);
+//        }
 
         $request = $this->request;
         $fields = array(
@@ -81,10 +88,25 @@ class ApiController extends Controller
      */
     public function applyListAction()
     {
-        $sql = "SELECT `id`, `name`, `num`  FROM `timeslot_list`";
-        $query = $this->_pdo->prepare($sql);
-        $query->execute();
-        $list = $query->fetchAll(\PDO::FETCH_ASSOC);
+//        查数据库方式
+//        $sql = "SELECT `id`, `name`, `num`  FROM `timeslot_list`";
+//        $query = $this->_pdo->prepare($sql);
+//        $query->execute();
+//        $list = $query->fetchAll(\PDO::FETCH_ASSOC);
+
+//        REDIS 方式
+        $list = array(
+            array('name' => '2017-10-21 am'),
+            array('name' => '2017-10-21 pm'),
+            array('name' => '2017-10-22 am'),
+            array('name' => '2017-10-22 pm'),
+        );
+        $redis = new Redis();
+
+        foreach($list as $k => $v) {
+            $list[$k]['num'] = $redis->hGet('quality', $v['name']) ? $redis->hGet('quality', $v['name']) : 0;
+        }
+
         if($list) {
             $data = array('status' => 1, 'msg' => 'get apply list success', 'data' => $list);
             $this->dataPrint($data);

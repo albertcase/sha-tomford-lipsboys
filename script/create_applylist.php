@@ -5,6 +5,8 @@ require_once SITE_URL . "/config/config.php";
 
 use Lib\Helper;
 use Lib\PDO;
+use \Lib\Redis;
+
 $list = array(
   array('name' => '2017-10-21 am', "num" => 10),
   array('name' => '2017-10-21 pm', "num" => 20),
@@ -30,6 +32,8 @@ class ApplyList
     public function createList()
     {
       foreach ($this->ApplyList as $k => $v) {
+          $redis = new Redis();
+          $redis->hSet('quality', $v['name'], $v['num']);
           $v['created'] = date('Y-m-d H:i:s');
           $v['status'] = 0;
           $id = $this->helper->insertTable('timeslot_list', $v);
