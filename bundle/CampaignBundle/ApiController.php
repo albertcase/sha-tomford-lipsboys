@@ -49,11 +49,10 @@ class ApiController extends Controller
         $phone = $request->request->get('phone');
         $timeslot = $request->request->get('timeslot');
 
-        //预约高并发处理
         $redis = new Redis();
         $key = "apply:{$user->openid}";
         if(!$redis->get($key)) {
-            $redis->set($key, 1); //进程锁定一分钟
+            $redis->set($key, 1); 
             $redis->setTimeout($key, 10);
             //场次无名额
             if($redis->hGet('quality', $timeslot) <= 0) {
@@ -73,9 +72,11 @@ class ApiController extends Controller
                 if($applyId) {
                     $this->sndSMS($phone);
                     $this->sendTmp($user->openid, '1azK4E7bIRlCxQ6Rd9xqeKYoMME8m-CCWrDPqYSyIUI', $name, $phone);
+                    $redis->setTimeout($key, 0);
                     $data = array('status' => 1, 'msg' => 'apply success');
                     $this->dataPrint($data);
-                } else { //TODO 高并发的情况下预约失败 是否再库存加回来 ？
+                } else { //TODO 
+                    $redis->setTimeout($key, 0);
                     $data = array('status' => 0, 'msg' => 'apply failed');
                     $this->dataPrint($data);
                 }
