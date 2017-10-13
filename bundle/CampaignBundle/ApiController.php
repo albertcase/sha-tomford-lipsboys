@@ -8,6 +8,7 @@ use Lib\PDO;
 use Lib\UserAPI;
 use Lib\WechatAPI;
 use \Lib\Redis;
+use yii\db\Exception;
 
 class ApiController extends Controller
 {
@@ -33,60 +34,71 @@ class ApiController extends Controller
     public function applyAction()
     {
         global $user;
-        //判断是否已经预约过
-        if($this->checkUserApply()) {
-            $data = array('status' => 3, 'msg' => 'apply again');
-            $this->dataPrint($data);
-        }
-        $request = $this->request;
-        $fields = array(
-            'name' => array('notnull', '120'),
-            'phone' => array('cellphone', '121'),
-            'timeslot' => array('notnull', '120'),
-        );
-        $request->validation($fields);
-        $name = $request->request->get('name');
-        $phone = $request->request->get('phone');
-        $timeslot = $request->request->get('timeslot');
-
-        $redis = new Redis();
         $key = "apply:{$user->openid}";
-        if(!$redis->get($key)) {
-            $redis->set($key, 1); 
-            $redis->setTimeout($key, 10);
-            //场次无名额
-            if($redis->hGet('quality', $timeslot) <= 0) {
-                $data = array('status' => 2, 'msg' => 'apply num is null');
+
+        try {
+            //判断是否已经预约过
+            if($this->checkUserApply()) {
+                $data = array('status' => 3, 'msg' => 'apply again');
                 $this->dataPrint($data);
             }
-            //库存减成功
-            if($this->inCreateCountNum($timeslot)) {
-                $apply = array(
-                    'uid' => $user->uid,
-                    'name' => $name,
-                    'timeslot' => $timeslot,
-                    'phone' => $phone,
-                    'created' => date('Y-m-d H:i:s'),
-                );
-                $applyId = $this->helper->insertTable('apply', $apply);
-                if($applyId) {
-                    $this->sndSMS($phone);
-                    $this->sendTmp($user->openid, '1azK4E7bIRlCxQ6Rd9xqeKYoMME8m-CCWrDPqYSyIUI', $name, $phone);
-                    $redis->setTimeout($key, 0);
-                    $data = array('status' => 1, 'msg' => 'apply success');
+            $request = $this->request;
+            $fields = array(
+                'name' => array('notnull', '120'),
+                'phone' => array('cellphone', '121'),
+                'timeslot' => array('notnull', '120'),
+            );
+            $request->validation($fields);
+            $name = $request->request->get('name');
+            $phone = $request->request->get('phone');
+            $timeslot = $request->request->get('timeslot');
+
+            if(!$this->checkTimeslot($timeslot)) {
+                $data = array('status' => 3, 'msg' => 'timeslot is failed');
+                $this->dataPrint($data);
+            }
+
+            $redis = new Redis();
+            $redis->setTimeout($key, 0);
+            if(!$redis->get($key)) {
+                $redis->set($key, 1);
+                $redis->setTimeout($key, 10);
+                //场次无名额
+                if($redis->hGet('quality', $timeslot) <= 0) {
+                    $data = array('status' => 2, 'msg' => 'apply num is null');
                     $this->dataPrint($data);
-                } else { //TODO 
-                    $redis->setTimeout($key, 0);
-                    $data = array('status' => 0, 'msg' => 'apply failed');
+                }
+                //库存减成功
+                if($this->inCreateCountNum($timeslot)) {
+                    $apply = array(
+                        'uid' => $user->uid,
+                        'name' => $name,
+                        'timeslot' => $timeslot,
+                        'phone' => $phone,
+                        'created' => date('Y-m-d H:i:s'),
+                    );
+                    $applyId = $this->helper->insertTable('apply', $apply);
+                    if($applyId) {
+                        $this->sndSMS($phone);
+                        $this->sendTmp($user->openid, 'fnuTFmQ5GIJSALzZ6RTTlwmye_e8WC_D6AUt3pagLY8', $name, $timeslot);
+                        $redis->setTimeout($key, 0);
+                        $data = array('status' => 1, 'msg' => 'apply success');
+                        $this->dataPrint($data);
+                    } else { //TODO
+                        $redis->setTimeout($key, 0);
+                        $data = array('status' => 0, 'msg' => 'apply failed');
+                        $this->dataPrint($data);
+                    }
+                } else {
+                    $data = array('status' => 2, 'msg' => 'apply num is null');
                     $this->dataPrint($data);
                 }
             } else {
-                $data = array('status' => 2, 'msg' => 'apply num is null');
+                $data = array('status' => 3, 'msg' => 'you is applying');
                 $this->dataPrint($data);
             }
-        } else {
-            $data = array('status' => 3, 'msg' => 'you is applying');
-            $this->dataPrint($data);
+        } catch (Exception $e) {
+            $redis->setTimeout($key, 0);
         }
     }
 
@@ -120,10 +132,18 @@ class ApiController extends Controller
 
 //        REDIS 方式
         $list = array(
-            array('name' => '2017-10-21 am'),
-            array('name' => '2017-10-21 pm'),
-            array('name' => '2017-10-22 am'),
-            array('name' => '2017-10-22 pm'),
+            array('name' => '10:00-11:00', "num" => 200),
+            array('name' => '11:00-12:00', "num" => 200),
+            array('name' => '12:00-13:00', "num" => 200),
+            array('name' => '13:00-14:00', "num" => 200),
+            array('name' => '14:00-15:00', "num" => 200),
+            array('name' => '15:00-16:00', "num" => 200),
+            array('name' => '16:00-17:00', "num" => 200),
+            array('name' => '17:00-18:00', "num" => 200),
+            array('name' => '18:00-19:00', "num" => 200),
+            array('name' => '19:00-20:00', "num" => 200),
+            array('name' => '20:00-21:00', "num" => 200),
+            array('name' => '21:00-22:00', "num" => 200),
         );
         $redis = new Redis();
 
@@ -182,7 +202,7 @@ class ApiController extends Controller
     /**
      * 发送模版消息
      */
-    private function sendTmp($openid, $tmpid, $name, $phone)
+    private function sendTmp($openid, $tmpid, $name, $timeslot)
     {
         $data = array(
           'touser' => $openid,
@@ -190,7 +210,7 @@ class ApiController extends Controller
           'topcolor' => "#FF0000",
           'data' => array(
               'first' => array(
-                  'value' => 'tomford预约信息',
+                  'value' => '恭喜你，预约成功',
                   'color' => '#173177',
               ),
               'keyword1' => array(
@@ -198,23 +218,15 @@ class ApiController extends Controller
                   'color' => '#173177',
               ),
               'keyword2' => array(
-                  'value' => $phone,
+                  'value' => 'tomfordlipsboys',
                   'color' => '#173177',
               ),
               'keyword3' => array(
-                  'value' => '12312312',
-                  'color' => '#173177',
-              ),
-              'keyword4' => array(
-                  'value' => '2017-10-27 am',
-                  'color' => '#173177',
-              ),
-              'keyword5' => array(
-                  'value' => '领取小样',
+                  'value' => $timeslot,
                   'color' => '#173177',
               ),
               'remark' => array(
-                  'value' => '请在指定时间前来',
+                  'value' => '感谢您的使用',
                   'color' => '#173177',
               ),
           ),
@@ -232,7 +244,7 @@ class ApiController extends Controller
     {
         $ch = curl_init();
         $apikey = "b42c77ce5a2296dcc0199552012a4bd9";
-        $text = "【Kenzo凯卓】您已成功预约领取小样！";
+        $text = "【汤姆福特】您已预约成功。\n时间：2017-10-20\n地址：上海世博创意秀 (上海市黄浦区半淞园路498号) \n敬请莅临参与活动，谢谢您的支持。";
         $data = array(
           'text' => $text,
           'apikey' => $apikey,
@@ -277,6 +289,21 @@ class ApiController extends Controller
     }
 
     /**
+     * 验证场次是否正确
+     */
+    private function checkTimeslot($timeslot)
+    {
+        $sql = "SELECT `id` FROM `timeslot_list` WHERE `name` = :timeslot";
+        $query = $this->_pdo->prepare($sql);
+        $query->execute(array(':timeslot' => $timeslot));
+        $row = $query->fetch(\PDO::FETCH_ASSOC);
+        if($row) {
+            return 1;
+        }
+        return 0;
+    }
+
+    /**
      * 验证当前用户是否已经预约过
      */
     private function checkUserApply()
@@ -309,7 +336,7 @@ class ApiController extends Controller
         $code = rand(1000, 9999);
         $RedisAPI = new Redis();
         $RedisAPI->setPhoneCode($mobile, $code, '3600');
-        $text = "【Kenzo凯卓】您的验证码是{$code}";
+        $text = "【汤姆福特】您的验证码是{$code}";
         $data = array('text'=>$text,'apikey'=>$apikey,'mobile'=>$mobile);
         curl_setopt ($ch, CURLOPT_URL, 'https://sms.yunpian.com/v2/sms/single_send.json');
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
