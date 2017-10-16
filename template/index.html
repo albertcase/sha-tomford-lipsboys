@@ -30,14 +30,13 @@
 <!--main content-->
 <!-- 已关注 -->
 <div class="wrapper animate">
-    <!-- sometimes z-index is larger than border-frame, sometimes is lower-->
-    <div class="logo">
-        <img src="../src/dist/images/logo.png" alt="kenzo"/>
-    </div>
     <!-- z-index is low-->
     <div class="container">
         <!-- 填写表单选项-->
         <div class="pin pin-2" id="pin-fillform">
+            <div class="show-img">
+                <img src="../src/dist/images/show-1.jpg" alt=""/>
+            </div>
             <h3 class="title">
                 DATE<br>
                 ADDRESS
@@ -52,8 +51,8 @@
                     </div>
                     <div class="input-box input-box-validate-message-code">
                         <input type="text" id="input-validate-message-code" placeholder="输入短信验证码"/>
-                        <div class="btn btn-get-msg-code">
-                            <div class="tt">获取验证码<span class="second">(60s)</span></div>
+                        <div class="btn-get-msg-code">
+                            <div class="tt">获取验证码</div>
                         </div>
                     </div>
                     <div class="input-box input-box-timeslot select-box">
