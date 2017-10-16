@@ -19,25 +19,16 @@
         <div class="mod-orient-layer__desc">请在解锁模式下使用竖屏浏览</div>
     </div>
 </div>
-<div class="preload">
-    <div class="animate-flower">
-        <!--<img src="../src/dist/images/preload-flower.jpg" alt="kenzo"/>-->
-    </div>
-    <div class="loading-num">
-        ...<span class="num">10</span>%
-    </div>
-</div>
 <!--main content-->
 <!-- 已关注 -->
 <div class="wrapper animate">
-    <!-- sometimes z-index is larger than border-frame, sometimes is lower-->
-    <div class="logo">
-        <img src="../src/dist/images/logo.png" alt="kenzo"/>
-    </div>
     <!-- z-index is low-->
     <div class="container">
         <!-- 填写表单选项-->
         <div class="pin pin-2" id="pin-fillform">
+            <div class="show-img">
+                <img src="../src/dist/images/show-1.jpg" alt=""/>
+            </div>
             <h3 class="title">
                 DATE<br>
                 ADDRESS
@@ -52,8 +43,8 @@
                     </div>
                     <div class="input-box input-box-validate-message-code">
                         <input type="text" id="input-validate-message-code" placeholder="输入短信验证码"/>
-                        <div class="btn btn-get-msg-code">
-                            <div class="tt">获取验证码<span class="second">(60s)</span></div>
+                        <div class="btn-get-msg-code">
+                            <div class="tt">获取验证码</div>
                         </div>
                     </div>
                     <div class="input-box input-box-timeslot select-box">
@@ -68,26 +59,20 @@
                 </div>
             </form>
         </div>
-        <!-- 抽奖结果显示 -->
+        <!-- 提交成功 -->
         <div class="pin pin-3" id="pin-result">
-            <div class="v-content">
-                <h3 class="title">「提交成功」</h3>
-                <div class="des">
-                    Miss K将会在30个工作日内<br>
-                    将花颜舒柔夜间修护面膜（75ml）寄出<br>
-                    请您耐心等候哦~<br>
-                    云朵般的面膜质地，悠享睡美人的梦幻夜
-                </div>
+            <h3 class="title"></h3>
+            <div class="show">
+                <img src="../src/dist/images/show-2.jpg" alt=""/>
             </div>
-        </div>
-        <div class="pin pin-4">
-            <div class="v-content">
-                <h3 class="title">「活动提示」</h3>
-                <div class="des">
-                    很遗憾，您之前未参加签到活动<br>
-                    暂无抽奖机会<br>
-                    敬请持续关注KENZO官方微信<br>
-                    更多福利活动等你哦！
+            <div class="submitted-info">
+                <div class="t1">
+                    Successfully
+                    submitted
+                </div>
+                <div class="details">
+                    DATE & TIME
+                    ADDRESS
                 </div>
             </div>
         </div>
