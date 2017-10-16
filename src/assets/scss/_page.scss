@@ -298,3 +298,17 @@ $ani-delay-5: 5000ms;
     @include size(5.52rem,4.57rem);
   }
 }
+
+//pin-result
+#pin-result{
+  .submitted-info{
+    text-align: center;
+    padding-top: 1rem;
+    font-size: 0.34rem;
+    .t1{
+      font-size: 0.48rem;
+      font-weight: bold;
+      margin-bottom: 0.3rem;
+    }
+  }
+}

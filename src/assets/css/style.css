@@ -953,3 +953,14 @@ body {
   width: 5.52rem;
   height: 4.57rem;
 }
+
+#pin-result .submitted-info {
+  text-align: center;
+  padding-top: 1rem;
+  font-size: 0.34rem;
+}
+#pin-result .submitted-info .t1 {
+  font-size: 0.48rem;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}

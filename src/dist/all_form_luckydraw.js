@@ -1623,23 +1623,23 @@ Api = {
 
     //Form submit of the luckydraw
     submitForm_apply:function(obj,callback){
-        Common.msgBox.add('loading...');
-        $.ajax({
-            url:'/api/apply',
-            type:'POST',
-            dataType:'json',
-            data:obj,
-            success:function(data){
-                Common.msgBox.remove();
-                return callback(data);
-                //status=1 有库存
-            }
-        });
+        //Common.msgBox.add('loading...');
+        //$.ajax({
+        //    url:'/api/apply',
+        //    type:'POST',
+        //    dataType:'json',
+        //    data:obj,
+        //    success:function(data){
+        //        Common.msgBox.remove();
+        //        return callback(data);
+        //        //status=1 有库存
+        //    }
+        //});
 
-        //return callback({
-        //    status:0,
-        //    msg:'fillform'
-        //})
+        return callback({
+            status:1,
+            msg:'fillform'
+        })
 
 
     },
@@ -1664,22 +1664,22 @@ Api = {
     //sent message validate code
     //mobile
     sendMsgValidateCode:function(obj,callback){
-        //Common.msgBox.add('loading...');
-        //$.ajax({
-        //    url:'/api/phonecode',
-        //    type:'POST',
-        //    dataType:'json',
-        //    data:obj,
-        //    success:function(data){
-        //        Common.msgBox.remove();
-        //        return callback(data);
-        //    }
-        //});
-
-        return callback({
-            status:1,
-            msg:'提交成功'
+        Common.msgBox.add('loading...');
+        $.ajax({
+            url:'/api/phonecode',
+            type:'POST',
+            dataType:'json',
+            data:obj,
+            success:function(data){
+                Common.msgBox.remove();
+                return callback(data);
+            }
         });
+
+        //return callback({
+        //    status:1,
+        //    msg:'提交成功'
+        //});
 
 
     },
@@ -1706,6 +1706,20 @@ Api = {
 
     },
 
+//    Get applylist
+    getApplyList:function(callback){
+        Common.msgBox.add('loading...');
+        $.ajax({
+            url:'/api/applylist',
+            type:'POST',
+            dataType:'json',
+            success:function(data){
+                Common.msgBox.remove();
+                return callback(data);
+            }
+        });
+    },
+
 
 };
 /*For join page
@@ -1717,7 +1731,12 @@ Api = {
         //isLuckyDraw /*是否抽奖*/
         //remaintimes /*剩余抽奖次数*/
         this.disableClick = false;
-        this.timeSlotJson = ['请选择一个时间段','10:00-10:30AM','10:30-11:30AM','11:30AM-12:30PM','12:30PM-13:30PM'];
+        //this.timeSlotJson = ['选择时段'];
+        //for(var i=10;i<22;i++){
+        //    var timeText = i+':00 - '+(i+1)+':00';
+        //    this.timeSlotJson.push(timeText);
+        //}
+
     };
     //init
     controller.prototype.init = function(){
@@ -1810,18 +1829,30 @@ Api = {
                     inputMobileVal = $('#input-mobile').val(),
                     inputMsgCodeVal = $('#input-validate-message-code').val(),
                     selectTimeSlotVal = $('#select-timeslot').val();
-                Api.submitForm_apply({
-                    name:inputNameVal,
-                    mobile:inputMobileVal,
-                    timeslot:selectTimeSlotVal,
-                    msgCode:inputMsgCodeVal
-                },function(data){
-                    if(data.status==1){
-                        Common.gotoPin(2);
+                Api.checkMsgValidateCode({
+                    phone: inputMobileVal,
+                    phonecode: inputMsgCodeVal
+                },function(json){
+                    if(json.status==1){
+                    //    if validate message is right, then submit
+                        Api.submitForm_apply({
+                            name:inputNameVal,
+                            mobile:inputMobileVal,
+                            timeslot:selectTimeSlotVal,
+                            //msgCode:inputMsgCodeVal
+                        },function(data){
+                            if(data.status==1){
+                                //go success page
+                                Common.gotoPin(1);
+                            }else{
+                                Common.alertBox.add(data.msg);
+                            }
+                        });
                     }else{
-                        Common.alertBox.add(data.msg);
+                        Common.alertBox.add(json.msg);
                     }
                 });
+
             }
 
         });
@@ -1829,14 +1860,18 @@ Api = {
         //    switch the province
         var curProvinceIndex = 0;
         $('#select-timeslot').on('change',function(){
-            //curProvinceIndex = document.getElementById('select-timeslot').selectedIndex;
+            var curIndex = document.getElementById('select-timeslot').selectedIndex;
+            var curPeopleNum =  $('#select-timeslot option').eq(curIndex).attr('data-num');
+            //test number
+            //curPeopleNum  = 200;
+            if(curPeopleNum>199){
+                Common.alertBox.add('此时段预约人数已经满额');
+                return;
+            }
             $('#input-text-timeslot').val($(this).val());
+
         });
 
-        //switch validate code
-        $('.validate-code').on('touchstart', function(){
-            self.getValidateCode();
-        });
 
         /*
          * validate phonenumber first
@@ -1910,16 +1945,19 @@ Api = {
     controller.prototype.showTimeSlot = function(){
         var self = this;
         //    list all province
-        var timeSlots = '';
-        var timeslotSelectEle = $('#select-timeslot'),
-            provinceInputEle = $('#input-text-province');
-        self.timeSlotJson.forEach(function(item){
-            timeSlots = timeSlots+'<option value="'+item+'">'+item+'</option>';
+        var timeSlots = '<option value="">选择时段</option>';
+        var timeslotSelectEle = $('#select-timeslot');
+        //get all apply list
+        Api.getApplyList(function(json){
+            if(json.status==1){
+                json.data.forEach(function(item){
+                    timeSlots = timeSlots+'<option value="'+item.name+'" data-num="'+item.num+'">'+item.name+'</option>';
+                });
+                timeslotSelectEle.html(timeSlots);
+            }else{
+                Common.alertBox.add(json.msg);
+            }
         });
-        timeslotSelectEle.html(timeSlots);
-        //provinceInputEle.val(provinceSelectEle.val());
-        //self.showCity(0);
-        //self.showDistrict(0,0);
     };
 
     //validation the form
@@ -1951,7 +1989,7 @@ Api = {
             }
         }
 
-        if(!selectTimeSlot.value || selectTimeSlot.value == self.timeSlotJson[0]){
+        if(!selectTimeSlot.value){
             //Common.errorMsg.add(selectProvince.parentElement,'请选择省份');
             Common.errorMsgBox.add('请选择一个时间段');
             validate = false;

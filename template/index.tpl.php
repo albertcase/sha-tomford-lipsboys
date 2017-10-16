@@ -50,7 +50,7 @@
                     <div class="input-box input-box-timeslot select-box">
                         <input type="text" id="input-text-timeslot" placeholder="预约时间段"/>
                         <select name="timeslot" id="select-timeslot">
-                            <option value="">预约时间段</option>
+                            <option value="">选择时段</option>
                         </select>
                     </div>
                 </div>
@@ -67,12 +67,11 @@
             </div>
             <div class="submitted-info">
                 <div class="t1">
-                    Successfully
-                    submitted
+                    提交成功
                 </div>
                 <div class="details">
-                    DATE & TIME
-                    ADDRESS
+                    11月4日 18:00 - 21:00<br>
+                    上海市黄浦区半淞园路498号
                 </div>
             </div>
         </div>

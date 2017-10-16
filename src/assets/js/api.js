@@ -13,23 +13,23 @@ Api = {
 
     //Form submit of the luckydraw
     submitForm_apply:function(obj,callback){
-        Common.msgBox.add('loading...');
-        $.ajax({
-            url:'/api/apply',
-            type:'POST',
-            dataType:'json',
-            data:obj,
-            success:function(data){
-                Common.msgBox.remove();
-                return callback(data);
-                //status=1 有库存
-            }
-        });
+        //Common.msgBox.add('loading...');
+        //$.ajax({
+        //    url:'/api/apply',
+        //    type:'POST',
+        //    dataType:'json',
+        //    data:obj,
+        //    success:function(data){
+        //        Common.msgBox.remove();
+        //        return callback(data);
+        //        //status=1 有库存
+        //    }
+        //});
 
-        //return callback({
-        //    status:0,
-        //    msg:'fillform'
-        //})
+        return callback({
+            status:1,
+            msg:'fillform'
+        })
 
 
     },
@@ -54,22 +54,22 @@ Api = {
     //sent message validate code
     //mobile
     sendMsgValidateCode:function(obj,callback){
-        //Common.msgBox.add('loading...');
-        //$.ajax({
-        //    url:'/api/phonecode',
-        //    type:'POST',
-        //    dataType:'json',
-        //    data:obj,
-        //    success:function(data){
-        //        Common.msgBox.remove();
-        //        return callback(data);
-        //    }
-        //});
-
-        return callback({
-            status:1,
-            msg:'提交成功'
+        Common.msgBox.add('loading...');
+        $.ajax({
+            url:'/api/phonecode',
+            type:'POST',
+            dataType:'json',
+            data:obj,
+            success:function(data){
+                Common.msgBox.remove();
+                return callback(data);
+            }
         });
+
+        //return callback({
+        //    status:1,
+        //    msg:'提交成功'
+        //});
 
 
     },
@@ -94,6 +94,20 @@ Api = {
         //});
 
 
+    },
+
+//    Get applylist
+    getApplyList:function(callback){
+        Common.msgBox.add('loading...');
+        $.ajax({
+            url:'/api/applylist',
+            type:'POST',
+            dataType:'json',
+            success:function(data){
+                Common.msgBox.remove();
+                return callback(data);
+            }
+        });
     },
 
 
