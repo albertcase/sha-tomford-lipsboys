@@ -100,7 +100,7 @@
                     inputMobileVal = $('#input-mobile').val(),
                     inputMsgCodeVal = $('#input-validate-message-code').val(),
                     selectTimeSlotVal = $('#select-timeslot').val();
-                Api.submitForm_luckydraw({
+                Api.submitForm_apply({
                     name:inputNameVal,
                     mobile:inputMobileVal,
                     timeslot:selectTimeSlotVal,
@@ -182,13 +182,13 @@
         self.disableClick = true;
         $('.btn-get-msg-code').addClass('disabled');
         var maxSeconds = 60;
-        var ele = $('.btn-get-msg-code .second');
+        var ele = $('.btn-get-msg-code .tt');
         var aaa = setInterval(function(){
             maxSeconds--;
-            ele.text('('+maxSeconds+'s'+')');
+            ele.text(''+maxSeconds+'s'+'');
             if(maxSeconds<1){
                 self.disableClick = false;
-                ele.text('');
+                ele.text('获取验证码');
                 $('.btn-get-msg-code').removeClass('disabled');
                 clearInterval(aaa);
             }
@@ -217,7 +217,8 @@
         var self = this;
         var validate = true,
             inputName = document.getElementById('input-name'),
-            inputMobile = document.getElementById('input-mobile')
+            inputMobile = document.getElementById('input-mobile'),
+            inputValidateCode = document.getElementById('input-validate-message-code'),
             selectTimeSlot = document.getElementById('select-timeslot');
 
         if(!inputName.value){
@@ -243,6 +244,14 @@
         if(!selectTimeSlot.value || selectTimeSlot.value == self.timeSlotJson[0]){
             //Common.errorMsg.add(selectProvince.parentElement,'请选择省份');
             Common.errorMsgBox.add('请选择一个时间段');
+            validate = false;
+        }else{
+            //Common.errorMsg.remove(selectProvince.parentElement);
+        };
+
+        if(!inputValidateCode.value){
+            //Common.errorMsg.add(selectProvince.parentElement,'请选择省份');
+            Common.errorMsgBox.add('请输入短信验证码');
             validate = false;
         }else{
             //Common.errorMsg.remove(selectProvince.parentElement);

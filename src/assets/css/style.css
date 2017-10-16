@@ -882,7 +882,7 @@ body {
 }
 #pin-fillform #form-contact .input-box {
   position: relative;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.3rem;
   text-align: center;
 }
 #pin-fillform #form-contact .input-box input[type="text"],
@@ -915,9 +915,6 @@ body {
 #pin-fillform #form-contact .input-box-city-district .select-box {
   display: inline-block;
   width: 48%;
-}
-#pin-fillform #form-contact .btn-submit {
-  margin-top: 0.6rem;
 }
 #pin-fillform #form-contact .input-box-validate-message-code {
   position: relative;
