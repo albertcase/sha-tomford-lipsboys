@@ -32,17 +32,6 @@ var path = {
         //'./src/assets/js/api.js',
         //'./src/assets/js/home.js'
     ],
-    freeTrialJs:[
-        './src/assets/js/lib/zepto.min.js',
-        './src/assets/js/lib/pre-loader.js',
-        './src/assets/js/lib/cookie.js',
-        './src/assets/js/rem.js',
-        './src/assets/js/region.js',
-        './src/assets/js/common.js',
-        './src/assets/js/api.js',
-        './src/assets/js/wxshare.js',
-        './src/assets/js/form-freetrial.js',
-    ],
     luckydrawJs:[
         './src/assets/js/lib/zepto.min.js',
         './src/assets/js/lib/pre-loader.js',
@@ -51,7 +40,7 @@ var path = {
         './src/assets/js/region.js',
         './src/assets/js/common.js',
         './src/assets/js/api.js',
-        //'./src/assets/js/wxshare.js',
+        './src/assets/js/wxshare.js',
         './src/assets/js/form-luckydraw.js',
     ],
     images:[
@@ -90,14 +79,6 @@ gulp.task('css',['clean'],function () {
 });
 
 // Concatenate & Minify
-gulp.task('scripts_form_freetrial',['clean'], function() {
-    return gulp.src(path.freeTrialJs)
-        .pipe(concat('all_form_freetrial.js'))
-        .pipe(gulp.dest('./src/dist'))
-        .pipe(rename('all_form_freetrial.min.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest('./src/dist/js'));
-});
 gulp.task('scripts_form_luckydraw',['clean'], function() {
     return gulp.src(path.luckydrawJs)
         .pipe(concat('all_form_luckydraw.js'))
