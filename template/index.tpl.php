@@ -30,8 +30,9 @@
                 <img src="../src/dist/images/show-1.jpg" alt=""/>
             </div>
             <h3 class="title">
-                DATE<br>
-                ADDRESS
+                TOM FORD Lips & Boys系列见面会<br>
+                将于11月3日至4日上海世博创意秀场奢华呈献<br>
+                即刻点击注册，邂逅你的唇间男孩
             </h3>
             <form id="form-contact">
                 <div class="form-information">
@@ -39,16 +40,16 @@
                         <input type="text" id="input-name" placeholder="姓名"/>
                     </div>
                     <div class="input-box input-box-mobile">
-                        <input type="tel" maxlength="11" id="input-mobile" placeholder="电话"/>
+                        <input type="tel" maxlength="11" id="input-mobile" placeholder="电话号码"/>
                     </div>
                     <div class="input-box input-box-validate-message-code">
-                        <input type="text" id="input-validate-message-code" placeholder="输入短信验证码"/>
+                        <input type="text" id="input-validate-message-code" placeholder="验证码"/>
                         <div class="btn-get-msg-code">
-                            <div class="tt">获取验证码</div>
+                            <div class="tt">验证</div>
                         </div>
                     </div>
                     <div class="input-box input-box-timeslot select-box">
-                        <input type="text" id="input-text-timeslot" placeholder="预约时间段"/>
+                        <input type="text" id="input-text-timeslot" placeholder="选择时段"/>
                         <select name="timeslot" id="select-timeslot">
                             <option value="">选择时段</option>
                         </select>

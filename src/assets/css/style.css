@@ -892,11 +892,16 @@ body {
   width: 100%;
   padding: 0;
   font-size: 0.28rem;
-  text-align: center;
+  text-align: left;
   border: none;
   background: #fff;
   height: 0.8rem;
   line-height: 0.8rem;
+}
+#pin-fillform #form-contact .input-box input[type="text"],
+#pin-fillform #form-contact .input-box input[type="tel"] {
+  padding: 0 0.2rem;
+  box-sizing: border-box;
 }
 #pin-fillform #form-contact .select-box {
   position: relative;
