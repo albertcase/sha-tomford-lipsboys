@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="../src/dist/css/style.css"/>
     <script src="http://tomfordwechat.samesamechina.com/api/v1/js/65454635-a701-4ea4-b7f5-5cebae7e6674/wechat?debug=1"></script>
     <script>
-        var isReservation = false;
+        var isReservation = <?php echo $conf['isReservation']; ?>;
     </script>
     <script src="../src/dist/js/all_form_luckydraw.min.js"></script>
 </head>

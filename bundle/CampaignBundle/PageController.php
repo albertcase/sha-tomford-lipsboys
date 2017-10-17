@@ -18,14 +18,30 @@ class PageController extends Controller
 
     public function indexAction()
     {
-        $config = array();
-        return $this->render('index', array('config' => $config));
+        $isReservation = $this->checkUserApply();
+        $config = array(
+            'isReservation' => $isReservation,
+        );
+        return $this->render('index', array('conf' => $config));
     }
 
-	  public function clearCookieAction()
+    public function clearCookieAction()
     {
       	$request = $this->Request();
 		    setcookie('_user', '', time(), '/', $request->getDomain());
 		    $this->statusPrint('success');
+    }
+
+    private function checkUserApply()
+    {
+        global $user;
+        $sql = "SELECT `id`, `name` FROM `apply` WHERE `uid` = :uid";
+        $query = $this->_pdo->prepare($sql);
+        $query->execute(array(':uid' => $user->uid));
+        $row = $query->fetch(\PDO::FETCH_ASSOC);
+        if($row) {
+            return 1;
+        }
+        return 0;
     }
 }

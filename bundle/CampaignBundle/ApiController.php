@@ -65,7 +65,7 @@ class ApiController extends Controller
                 $redis->setTimeout($key, 10);
                 //场次无名额
                 if($redis->hGet('quality', $timeslot) <= 0) {
-                    $data = array('status' => 2, 'msg' => 'apply num is null');
+                    $data = array('status' => 2, 'msg' => '抱歉，您选择的时间已约满，请换个时间再试试吧~');
                     $this->dataPrint($data);
                 }
                 //库存减成功
@@ -86,15 +86,15 @@ class ApiController extends Controller
                         $this->dataPrint($data);
                     } else { //TODO
                         $redis->setTimeout($key, 0);
-                        $data = array('status' => 0, 'msg' => 'apply failed');
+                        $data = array('status' => 0, 'msg' => '未能完成预约，请再试一次。');
                         $this->dataPrint($data);
                     }
                 } else {
-                    $data = array('status' => 2, 'msg' => 'apply num is null');
+                    $data = array('status' => 2, 'msg' => '抱歉，您选择的时间已约满，请换个时间再试试吧~');
                     $this->dataPrint($data);
                 }
             } else {
-                $data = array('status' => 3, 'msg' => 'you is applying');
+                $data = array('status' => 3, 'msg' => '您已完成过预约，欢迎届时莅临门店。');
                 $this->dataPrint($data);
             }
         } catch (Exception $e) {
