@@ -8,18 +8,12 @@ use Lib\PDO;
 use \Lib\Redis;
 
 $list = array(
-  array('name' => '10:00-11:00', "num" => 200),
-  array('name' => '11:00-12:00', "num" => 200),
-  array('name' => '12:00-13:00', "num" => 200),
-  array('name' => '13:00-14:00', "num" => 200),
-  array('name' => '14:00-15:00', "num" => 200),
-  array('name' => '15:00-16:00', "num" => 200),
-  array('name' => '16:00-17:00', "num" => 200),
-  array('name' => '17:00-18:00', "num" => 200),
-  array('name' => '18:00-19:00', "num" => 200),
-  array('name' => '19:00-20:00', "num" => 200),
-  array('name' => '20:00-21:00', "num" => 200),
-  array('name' => '21:00-22:00', "num" => 200),
+  array('name' => '11月3日 18:00-19:00', "num" => 700),
+  array('name' => '11月3日 19:00-20:00', "num" => 700),
+  array('name' => '11月3日 20:00-21:00', "num" => 700),
+  array('name' => '11月4日 18:00-19:00', "num" => 700),
+  array('name' => '11月4日 19:00-20:00', "num" => 700),
+  array('name' => '11月4日 20:00-21:00', "num" => 700),
 );
 
 $applylist = new ApplyList($list);

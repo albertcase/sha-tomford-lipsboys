@@ -79,7 +79,7 @@ class ApiController extends Controller
                     );
                     $applyId = $this->helper->insertTable('apply', $apply);
                     if($applyId) {
-                        $this->sndSMS($phone);
+                        $this->sndSMS($phone, $timeslot);
                         $this->sendTmp($user->openid, 'fnuTFmQ5GIJSALzZ6RTTlwmye_e8WC_D6AUt3pagLY8', $name, $timeslot);
                         $redis->setTimeout($key, 0);
                         $data = array('status' => 1, 'msg' => 'apply success');
@@ -132,18 +132,12 @@ class ApiController extends Controller
 
 //        REDIS 方式
         $list = array(
-            array('name' => '10:00-11:00', "num" => 200),
-            array('name' => '11:00-12:00', "num" => 200),
-            array('name' => '12:00-13:00', "num" => 200),
-            array('name' => '13:00-14:00', "num" => 200),
-            array('name' => '14:00-15:00', "num" => 200),
-            array('name' => '15:00-16:00', "num" => 200),
-            array('name' => '16:00-17:00', "num" => 200),
-            array('name' => '17:00-18:00', "num" => 200),
-            array('name' => '18:00-19:00', "num" => 200),
-            array('name' => '19:00-20:00', "num" => 200),
-            array('name' => '20:00-21:00', "num" => 200),
-            array('name' => '21:00-22:00', "num" => 200),
+            array('name' => '11月3日 18:00-19:00', "num" => 700),
+            array('name' => '11月3日 19:00-20:00', "num" => 700),
+            array('name' => '11月3日 20:00-21:00', "num" => 700),
+            array('name' => '11月4日 18:00-19:00', "num" => 700),
+            array('name' => '11月4日 19:00-20:00', "num" => 700),
+            array('name' => '11月4日 20:00-21:00', "num" => 700),
         );
         $redis = new Redis();
 
@@ -240,11 +234,11 @@ class ApiController extends Controller
     /**
      * 发送短信提醒
      */
-    private function sndSMS($moblie)
+    private function sndSMS($moblie, $timeslot)
     {
         $ch = curl_init();
         $apikey = "b42c77ce5a2296dcc0199552012a4bd9";
-        $text = "【汤姆福特】您已预约成功。\n时间：2017-10-20\n地址：上海世博创意秀 (上海市黄浦区半淞园路498号) \n敬请莅临参与活动，谢谢您的支持。";
+        $text = "【汤姆福特】您已预约成功。\n时间：{$timeslot}\n地址：上海世博创意秀 (上海市黄浦区半淞园路498号) \n敬请莅临参与活动，谢谢您的支持。";
         $data = array(
           'text' => $text,
           'apikey' => $apikey,
