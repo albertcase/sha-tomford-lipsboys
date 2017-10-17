@@ -222,7 +222,7 @@ class ApiController extends Controller
                   'color' => '#173177',
               ),
               'remark' => array(
-                  'value' => '感谢您的使用',
+                  'value' => '敬请莅临参与活动，谢谢您的支持。',
                   'color' => '#173177',
               ),
           ),
