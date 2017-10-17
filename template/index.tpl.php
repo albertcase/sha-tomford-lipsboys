@@ -71,7 +71,7 @@
                     提交成功
                 </div>
                 <div class="details">
-                    11月4日 18:00 - 21:00<br>
+                    <span class="date">11月4日 18:00 - 21:00</span><br>
                     上海市黄浦区半淞园路498号
                 </div>
             </div>

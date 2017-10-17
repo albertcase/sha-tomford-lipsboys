@@ -14,22 +14,22 @@ Api = {
     //Form submit of the luckydraw
     submitForm_apply:function(obj,callback){
         //Common.msgBox.add('loading...');
-        //$.ajax({
-        //    url:'/api/apply',
-        //    type:'POST',
-        //    dataType:'json',
-        //    data:obj,
-        //    success:function(data){
-        //        Common.msgBox.remove();
-        //        return callback(data);
-        //        //status=1 有库存
-        //    }
-        //});
+        $.ajax({
+            url:'/api/apply',
+            type:'POST',
+            dataType:'json',
+            data:obj,
+            success:function(data){
+                Common.msgBox.remove();
+                return callback(data);
+                //status=1 有库存
+            }
+        });
 
-        return callback({
-            status:1,
-            msg:'fillform'
-        })
+        //return callback({
+        //    status:1,
+        //    msg:'fillform'
+        //})
 
 
     },

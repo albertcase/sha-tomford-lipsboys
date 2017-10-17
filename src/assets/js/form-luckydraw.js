@@ -3,16 +3,8 @@
  * */
 ;(function(){
     var controller = function(){
-        //isSubmit  /*是否提交了用户详细信息表单*/
-        //isLuckyDraw /*是否抽奖*/
-        //remaintimes /*剩余抽奖次数*/
         this.disableClick = false;
-        //this.timeSlotJson = ['选择时段'];
-        //for(var i=10;i<22;i++){
-        //    var timeText = i+':00 - '+(i+1)+':00';
-        //    this.timeSlotJson.push(timeText);
-        //}
-
+        this.reservationDate = '';
     };
     //init
     controller.prototype.init = function(){
@@ -113,12 +105,14 @@
                     //    if validate message is right, then submit
                         Api.submitForm_apply({
                             name:inputNameVal,
-                            mobile:inputMobileVal,
+                            phone:inputMobileVal,
                             timeslot:selectTimeSlotVal,
                             //msgCode:inputMsgCodeVal
                         },function(data){
                             if(data.status==1){
                                 //go success page
+                                //self.reservationDate = selectTimeSlotVal;
+                                $('.details .date').html(selectTimeSlotVal);
                                 Common.gotoPin(1);
                             }else{
                                 Common.alertBox.add(data.msg);
@@ -140,7 +134,7 @@
             var curPeopleNum =  $('#select-timeslot option').eq(curIndex).attr('data-num');
             //test number
             //curPeopleNum  = 200;
-            if(curPeopleNum>199){
+            if(curPeopleNum<1){
                 Common.alertBox.add('此时段预约人数已经满额');
                 return;
             }
