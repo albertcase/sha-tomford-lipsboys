@@ -94,11 +94,6 @@
             <div class="logo">
                 <img src="../src/dist/images/logo.jpg" alt=""/>
             </div>
-
-            <p class="t1">
-                欢迎莅临TOM FORD美妆门店，<br>
-                选购您最喜爱的TOM FORD精品。
-            </p>
             <p class="des">
                 <strong>北京</strong>
                 北京市朝阳区建国路87号<br>
