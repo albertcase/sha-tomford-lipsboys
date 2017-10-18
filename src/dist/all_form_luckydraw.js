@@ -1862,7 +1862,12 @@ $(document).ready(function(){
         $('.wrapper').addClass('fade');
         self.bindEvent();
         self.showTimeSlot();
-        Common.gotoPin(0);
+        if(isReservation){
+            Common.gotoPin(1);
+        }else{
+            Common.gotoPin(0);
+        }
+
         //self.updateLuckyDrawStatus();
     };
 
