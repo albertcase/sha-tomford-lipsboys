@@ -203,12 +203,11 @@ $ani-delay-5: 5000ms;
       }
     }
   }
-  .foreground{
-    position: absolute;
-    left: 0.7rem;
-    z-index: 1;
-    bottom: -1.2rem;
-    @include size(5.52rem,4.57rem);
+  .tips{
+    color: #fff;
+    font-size: 0.18rem;
+    margin-top: 0.2rem;
+    text-align: center;
   }
 }
 

@@ -70,6 +70,7 @@
             <div class="btn btn-submit">
                 <div class="tt">提 交</div>
             </div>
+            <p class="tips">*阁下所填资料在确认提交后会被我们公司用作内部市场营销用途</p>
         </form>
     </div>
     <!-- 提交成功 -->
@@ -83,7 +84,7 @@
                 提交成功
             </div>
             <div class="details">
-                <span class="date"><?php echo $conf['applyDate']; ?></span><br>
+                2017年<span class="date"><?php echo $conf['applyDate']; ?></span><br>
                 上海市黄浦区半淞园路498号
             </div>
         </div>
