@@ -773,6 +773,7 @@ body {
   background: #fff;
   height: 0.8rem;
   line-height: 0.8rem;
+  border-radius: 0;
 }
 #pin-fillform #form-contact .input-box input[type="text"],
 #pin-fillform #form-contact .input-box input[type="tel"] {
