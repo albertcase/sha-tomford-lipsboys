@@ -80,13 +80,19 @@
         $('.wrapper').addClass('fade');
         self.bindEvent();
         self.showTimeSlot();
+
+        // if user has reservated success, to confirm page
+        // if user has not success, but maxNumber, to shop list page
+        // if user has not success, and maxNumber is 0, show form page
         if(isReservation){
             Common.gotoPin(1);
         }else{
-            Common.gotoPin(0);
+            if(maxNumber){
+                Common.gotoPin(2);
+            }else{
+                Common.gotoPin(0);
+            }
         }
-
-        //self.updateLuckyDrawStatus();
     };
 
     //bind Events
