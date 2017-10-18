@@ -79,7 +79,6 @@
         $('.preload').remove();
         $('.wrapper').addClass('fade');
         self.bindEvent();
-        self.showTimeSlot();
 
         // if user has reservated success, to confirm page
         // if user has not success, but maxNumber, to form page
@@ -88,6 +87,7 @@
             Common.gotoPin(1);
         }else{
             if(maxNumber){
+                self.showTimeSlot();
                 Common.gotoPin(0);
             }else{
                 Common.gotoPin(2);

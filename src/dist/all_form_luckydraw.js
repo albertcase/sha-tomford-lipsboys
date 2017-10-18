@@ -1415,6 +1415,8 @@ var region = [
 			el.addEventListener('touchmove', function(evt) {
 				//if the content is actually scrollable, i.e. the content is long enough
 				//that scrolling can occur
+                console.log(el.offsetHeight);
+                console.log(el.scrollHeight);
 				if(el.offsetHeight < el.scrollHeight)
 					evt._isScroller = true
 			})
@@ -1434,7 +1436,14 @@ $(document).ready(function(){
 	$('body').on('touchstart','.btn-alert-ok',function(){
 		$(this).parent().parent('.alertpop').remove();
 	});
-	Common.overscroll(document.querySelector('.wrapper'));
+    //Common.overscroll(document.querySelector('.wrapper'));
+    Common.overscroll(document.querySelector('#pin-shoplists'));
+    document.body.addEventListener('touchmove', function(evt) {
+        console.log(evt._isScroller);
+        if(!evt._isScroller) {
+            evt.preventDefault();
+        }
+    });
 
 });
 
@@ -1694,7 +1703,6 @@ $(document).ready(function(){
         $('.preload').remove();
         $('.wrapper').addClass('fade');
         self.bindEvent();
-        self.showTimeSlot();
 
         // if user has reservated success, to confirm page
         // if user has not success, but maxNumber, to form page
@@ -1703,6 +1711,7 @@ $(document).ready(function(){
             Common.gotoPin(1);
         }else{
             if(maxNumber){
+                self.showTimeSlot();
                 Common.gotoPin(0);
             }else{
                 Common.gotoPin(2);

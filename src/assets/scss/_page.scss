@@ -14,62 +14,20 @@ html,body{
 body{
   background: #000;
   color: #fff;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
+//for wrapper
+.wrapper{
+  //opacity: 0;
+  //height: 100%;
+  @include fullabsolute(0,0,100%,100%,1);
+  //overflow: hidden;
+  overflow: auto;
+  //-webkit-overflow-scrolling: touch;
+  //height: 500px;
 
-//for terms-pop
-.terms-pop{
-  .inner{
-    @include size(7.42rem,10.83rem);
-    background: url("../images/pop-bg.png") no-repeat;
-    background-size: 100%;
-    box-sizing: border-box;
-    padding-top: 0.9rem;
-    background-position: -0.05rem 0;
-  }
-  .title{
-    margin-bottom: 0.4rem;
-    background: transparent;
-    color: #343434;
-    font-size: 0.52rem;
-    padding: 0;
-    font-weight: bold;
-  }
-  .pcontent{
-    width: 6rem;
-    margin: 0 auto;
-    text-align: center;
-    padding: 0;
-    .subtitle{
-      display: inline-block;
-      background: #090909;
-      color: #fff;
-      font-size: 0.3rem;
-      font-weight: normal;
-      padding: 0.04rem 0.2rem;
-      margin-bottom: 0.1rem;
-    }
-    .des{
-      color: #6b6b6b;
-      font-size: 0.24rem;
-      line-height: 1.8;
-    }
-    .tips-2{
-      font-size: 0.2rem;
-    }
-    .product-name{
-      color: #6b6b6b;
-      font-size: 0.22rem;
-    }
-  }
-  .btn-close{
-    top: auto;
-    bottom: 0.8rem;
-    left: 50%;
-    margin-left: -0.3rem;
-    background: #343434;
-    border-radius: 100%;
-    @include size(0.6rem,0.6rem);
-  }
+
 }
 
 .pin{
@@ -80,9 +38,9 @@ body{
   bottom: 0;
   @include size(100%,100%);
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: auto;
   @include transition(opacity 1s);
-  //display: none;
+  display: none;
   &.current{
     display: block;
     opacity: 1;
@@ -121,18 +79,6 @@ body{
 .loading-wrap{
   display: none;
 }
-
-//for wrapper
-.wrapper{
-  opacity: 0;
-  @include fullabsolute(0,0,100%,100%,1);
-  overflow: hidden;
-}
-.container{
-  @include fullabsolute(0,0,100%,100%,10);
-}
-
-
 
 //for pin-landing
   //  setting animate time parameter
