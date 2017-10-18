@@ -33,8 +33,8 @@
                 <img src="../src/dist/images/show-1.jpg" alt=""/>
             </div>
             <h3 class="title">
-                TOM FORD Lips & Boys系列见面会<br>
-                将于11月3日至4日上海世博创意秀场奢华呈献<br>
+                TOM FORD Lips & Boys唇魅之夜<br>
+                将于11月3-4日在上海世博创意秀场奢华呈献<br>
                 即刻点击注册，邂逅你的唇间男孩
             </h3>
             <form id="form-contact">
