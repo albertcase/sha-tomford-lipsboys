@@ -199,13 +199,14 @@ class ApiController extends Controller
      */
     private function sendTmp($openid, $tmpid, $name, $timeslot)
     {
+        $timeslot = '2017年' . $timeslot;
         $data = array(
           'touser' => $openid,
           'template_id' => $tmpid,
           'topcolor' => "#FF0000",
           'data' => array(
               'first' => array(
-                  'value' => '恭喜你，预约成功',
+                  'value' => '恭喜您，预约成功',
                   'color' => '#173177',
               ),
               'keyword1' => array(
@@ -239,7 +240,7 @@ class ApiController extends Controller
     {
         $ch = curl_init();
         $apikey = "b42c77ce5a2296dcc0199552012a4bd9";
-        $text = "【汤姆福特】您已预约成功。\n时间：{$timeslot}\n地址：上海世博创意秀 (上海市黄浦区半淞园路498号) \n敬请莅临参与活动，谢谢您的支持。";
+        $text = "【汤姆福特】您已预约成功。\n时间：2017年{$timeslot}\n地址：上海世博创意秀 (上海市黄浦区半淞园路498号) \n敬请莅临参与活动，谢谢您的支持。";
         $data = array(
           'text' => $text,
           'apikey' => $apikey,
