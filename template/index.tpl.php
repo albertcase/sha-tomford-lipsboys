@@ -12,7 +12,7 @@
     <script src="http://tomfordwechat.samesamechina.com/api/v1/js/65454635-a701-4ea4-b7f5-5cebae7e6674/wechat?debug=1"></script>
     <script>
         var isReservation = <?php echo $conf['isReservation']; ?>;
-        var maxNumber = <?php echo $conf['isReservation']; ?>;
+        var maxNumber = <?php echo $conf['maxNumber']; ?>;
     </script>
     <script src="../src/dist/js/all_form_luckydraw.min.js"></script>
 </head>
@@ -75,7 +75,7 @@
                     提交成功
                 </div>
                 <div class="details">
-                    <span class="date">11月4日 18:00 - 21:00</span><br>
+                    <span class="date"><?php echo $conf['applyDate']; ?></span><br>
                     上海市黄浦区半淞园路498号
                 </div>
             </div>

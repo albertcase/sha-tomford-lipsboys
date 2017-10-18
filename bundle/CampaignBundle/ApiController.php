@@ -7,8 +7,7 @@ use Lib\Helper;
 use Lib\PDO;
 use Lib\UserAPI;
 use Lib\WechatAPI;
-use \Lib\Redis;
-use yii\db\Exception;
+use Lib\Redis;
 
 class ApiController extends Controller
 {
