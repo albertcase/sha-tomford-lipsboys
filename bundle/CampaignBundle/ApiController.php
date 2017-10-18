@@ -214,7 +214,7 @@ class ApiController extends Controller
                   'color' => '#173177',
               ),
               'keyword2' => array(
-                  'value' => 'tomfordlipsboys',
+                  'value' => 'TOM FORD Lips & Boys唇魅之夜',
                   'color' => '#173177',
               ),
               'keyword3' => array(
