@@ -82,15 +82,15 @@
         self.showTimeSlot();
 
         // if user has reservated success, to confirm page
-        // if user has not success, but maxNumber, to shop list page
-        // if user has not success, and maxNumber is 0, show form page
+        // if user has not success, but maxNumber, to form page
+        // if user has not success, and maxNumber is 0, go shop list page
         if(isReservation){
             Common.gotoPin(1);
         }else{
             if(maxNumber){
-                Common.gotoPin(2);
-            }else{
                 Common.gotoPin(0);
+            }else{
+                Common.gotoPin(2);
             }
         }
     };
@@ -214,7 +214,7 @@
             ele.text(''+maxSeconds+'s'+'');
             if(maxSeconds<1){
                 self.disableClick = false;
-                ele.text('获取验证码');
+                ele.text('验证');
                 $('.btn-get-msg-code').removeClass('disabled');
                 clearInterval(aaa);
             }
