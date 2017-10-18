@@ -102,6 +102,7 @@
          * submit the form
          * */
         $('.btn-submit').on('touchstart',function(){
+            _hmt.push(['_trackEvent', 'btn', 'click', 'submitForm']);
             if(self.validateForm()){
                 //name mobile province city area address
                 var inputNameVal = $('#input-name').val(),
@@ -160,6 +161,7 @@
          * if image validate code is right
          * */
         $('.btn-get-msg-code').on('touchstart', function(){
+            _hmt.push(['_trackEvent', 'btn', 'click', 'validateCode']);
             if(self.disableClick) return;
             if(!$('#input-mobile').val()){
                 Common.errorMsgBox.add('手机号码不能为空');

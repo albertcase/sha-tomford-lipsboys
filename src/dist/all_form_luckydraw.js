@@ -1579,7 +1579,7 @@ function weixinshare(obj,successCallBack){
             type: '',
             dataUrl: '',
             success: function () {
-                //_hmt.push(['_trackEvent', 'wechat', 'share', 'shareOnMenuShareAppMessage']);
+                _hmt.push(['_trackEvent', 'wechat', 'share', 'shareOnMenuShareAppMessage']);
                 successCallBack();
 
             },
@@ -1592,7 +1592,7 @@ function weixinshare(obj,successCallBack){
             link: obj.link,
             imgUrl: obj.img,
             success: function () {
-                //_hmt.push(['_trackEvent', 'wechat', 'share', 'shareOnMenuShareTimeline']);
+                _hmt.push(['_trackEvent', 'wechat', 'share', 'shareOnMenuShareTimeline']);
                 successCallBack();
             },
             cancel: function () {
@@ -1717,6 +1717,7 @@ $(document).ready(function(){
          * submit the form
          * */
         $('.btn-submit').on('touchstart',function(){
+            _hmt.push(['_trackEvent', 'btn', 'click', 'submitForm']);
             if(self.validateForm()){
                 //name mobile province city area address
                 var inputNameVal = $('#input-name').val(),
@@ -1775,6 +1776,7 @@ $(document).ready(function(){
          * if image validate code is right
          * */
         $('.btn-get-msg-code').on('touchstart', function(){
+            _hmt.push(['_trackEvent', 'btn', 'click', 'validateCode']);
             if(self.disableClick) return;
             if(!$('#input-mobile').val()){
                 Common.errorMsgBox.add('手机号码不能为空');
