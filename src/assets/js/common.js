@@ -145,8 +145,6 @@
 			el.addEventListener('touchmove', function(evt) {
 				//if the content is actually scrollable, i.e. the content is long enough
 				//that scrolling can occur
-                console.log(el.offsetHeight);
-                console.log(el.scrollHeight);
 				if(el.offsetHeight < el.scrollHeight)
 					evt._isScroller = true
 			})
@@ -168,8 +166,8 @@ $(document).ready(function(){
 	});
     //Common.overscroll(document.querySelector('.wrapper'));
     Common.overscroll(document.querySelector('#pin-shoplists'));
+    Common.overscroll(document.querySelector('#pin-fillform'));
     document.body.addEventListener('touchmove', function(evt) {
-        console.log(evt._isScroller);
         if(!evt._isScroller) {
             evt.preventDefault();
         }

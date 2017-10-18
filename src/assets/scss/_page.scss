@@ -15,7 +15,7 @@ body{
   background: #000;
   color: #fff;
   overflow: auto;
-  -webkit-overflow-scrolling: touch;
+  //-webkit-overflow-scrolling: touch;
 }
 //for wrapper
 .wrapper{
@@ -39,6 +39,7 @@ body{
   @include size(100%,100%);
   box-sizing: border-box;
   overflow: auto;
+  padding-bottom: 1rem;
   @include transition(opacity 1s);
   display: none;
   &.current{

@@ -646,7 +646,6 @@ body {
   background: #000;
   color: #fff;
   overflow: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 .wrapper {
@@ -669,6 +668,7 @@ body {
   height: 100%;
   box-sizing: border-box;
   overflow: auto;
+  padding-bottom: 1rem;
   -moz-transition: opacity 1s;
   -o-transition: opacity 1s;
   -webkit-transition: opacity 1s;
