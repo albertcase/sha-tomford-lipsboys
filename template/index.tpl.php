@@ -45,7 +45,7 @@
             TOM FORD Lips & Boys唇魅之夜<br>
             2017年11月3日-4日<br>
             将于上海世博创意秀场奢华呈献<br>
-            即刻点击注册，邂逅你的唇间男生
+            即刻点击注册，邂逅你的唇间男孩
         </h3>
         <form id="form-contact">
             <div class="form-information">
