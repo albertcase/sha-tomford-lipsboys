@@ -1,0 +1,1 @@
+<?php echo $conf['isProve'];//1已核销，0未核销?>

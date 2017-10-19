@@ -69,11 +69,14 @@ class ApiController extends Controller
                 }
                 //库存减成功
                 if($this->inCreateCountNum($timeslot)) {
+                    //生成核销码
+                    $proveCode = $this->create_uuid();
                     $apply = array(
                         'uid' => $user->uid,
                         'name' => $name,
                         'timeslot' => $timeslot,
                         'phone' => $phone,
+                        'provecode' => $proveCode,
                         'created' => date('Y-m-d H:i:s'),
                     );
                     $applyId = $this->helper->insertTable('apply', $apply);
@@ -398,5 +401,19 @@ class ApiController extends Controller
         $data = curl_exec($ch);
         curl_close($ch);
         return json_decode($data);
+    }
+
+     /**
+     * 生成UUID
+     */
+    private function create_uuid($prefix = "")
+    {   
+        $str = md5(uniqid(mt_rand(), true));
+        $uuid  = substr($str,0,8) . '-';
+        $uuid .= substr($str,8,4) . '-';
+        $uuid .= substr($str,12,4) . '-';
+        $uuid .= substr($str,16,4) . '-';
+        $uuid .= substr($str,20,12);
+        return $prefix . $uuid;
     }
 }

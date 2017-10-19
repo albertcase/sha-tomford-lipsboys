@@ -35,11 +35,37 @@ class PageController extends Controller
         return $this->render('index', array('conf' => $config));
     }
 
+    public function proveAction()
+    {
+        $proveCode = $_GET['code'];
+        $isProve = 0;
+        $prove = $this->checkProveStatus($proveCode);
+        if($prove) {
+            $isProve = $prove->provestatus;
+        }
+        $config = array(
+            'isProve' =>  $isProve,
+        );
+        return $this->render('consume', array('conf' => $config));   
+    }
+
     public function clearCookieAction()
     {
       	$request = $this->Request();
 		    setcookie('_user', '', time(), '/', $request->getDomain());
 		    $this->statusPrint('success');
+    }
+
+    private function checkProveStatus($proveCode)
+    {
+        $sql = "SELECT `id`, `provestatus` FROM `apply` WHERE `provecode` = :provecode";
+        $query = $this->_pdo->prepare($sql);
+        $query->execute(array(':provecode' => $proveCode));
+        $row = $query->fetch(\PDO::FETCH_ASSOC);
+        if($row) {
+            return (object)$row;
+        }
+        return 0;
     }
 
     private function getApplitNum()

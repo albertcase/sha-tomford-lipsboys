@@ -12,8 +12,8 @@ $routers['/clear'] = array('CampaignBundle\Page', 'clearCookie');
 //System end
 
 //Campaign
-$routers['/ajax/post'] = array('CampaignBundle\Api', 'form');
 $routers['/'] = array('CampaignBundle\Page', 'index');
+$routers['/prove'] = array('CampaignBundle\Page', 'prove');
 
 //API
 $routers['/api/phonecode'] = array('CampaignBundle\Api', 'phoneCode');
