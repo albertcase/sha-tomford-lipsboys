@@ -1611,7 +1611,7 @@ function weixinshare(obj,successCallBack){
 
 $(document).ready(function(){
     weixinshare({
-        title1: 'TOM FORD Lips & Boys唇魅之夜',
+        title1: 'TOM FORD LIPS & BOYS唇魅之夜',
         des: '点击注册，邂逅你的唇间男孩',
         link: window.location.href,
         img: window.location.origin+'/src/dist/images/share.jpg'

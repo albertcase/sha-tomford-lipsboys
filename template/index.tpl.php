@@ -42,7 +42,7 @@
             <img src="../src/dist/images/show-1.jpg" alt=""/>
         </div>
         <h3 class="title">
-            TOM FORD Lips & Boys唇魅之夜<br>
+            TOM FORD LIPS & BOYS唇魅之夜<br>
             2017年11月3日-4日<br>
             将于上海世博创意秀场奢华呈献<br>
             即刻点击注册，邂逅你的唇间男孩
@@ -88,6 +88,9 @@
                 2017年<span class="date"><?php echo $conf['applyDate']; ?></span><br>
                 上海市黄浦区半淞园路498号
             </div>
+            <div class="tips">
+                *本邀请函仅限本人使用
+            </div>
         </div>
     </div>
     <!-- 店铺列表-->
@@ -99,7 +102,7 @@
             感谢您的支持！<br>
             非常抱歉，现在席位已满。<br>
             欢迎您莅临TOM FORD美妆专柜，<br>
-            了解更多Lips & Boys系列详情。
+            了解更多LIPS & BOYS系列详情。
         </h3>
         <div class="logo">
             <img src="../src/dist/images/logo.jpg" alt=""/>
