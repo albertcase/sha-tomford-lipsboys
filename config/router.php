@@ -13,7 +13,7 @@ $routers['/clear'] = array('CampaignBundle\Page', 'clearCookie');
 
 //Campaign
 $routers['/'] = array('CampaignBundle\Page', 'index');
-$routers['/prove'] = array('CampaignBundle\Page', 'prove');
+$routers['/consume'] = array('CampaignBundle\Page', 'prove');
 
 //API
 $routers['/api/phonecode'] = array('CampaignBundle\Api', 'phoneCode');

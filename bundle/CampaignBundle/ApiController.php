@@ -119,7 +119,7 @@ class ApiController extends Controller
         $prove = $this->checkProveStatus($code);
         if($prove) {
             if((int)$prove->provestatus == 1) {
-                $data = array('status' => 1, 'msg' => '该核销码已经核销过');
+                $data = array('status' => 3, 'msg' => '该核销码已经核销过');
                 $this->dataPrint($data);
             }
         } else {

@@ -174,7 +174,62 @@ data: [
 
 ```javascript
 {
-status: '0',
-msg: 'get apply list failed'
+	status: '0',
+	msg: 'get apply list failed'
+}
+```
+---
+
+### 5. 核销API
+
+Method: POST
+
+##### API URL:
+
+```html
+domian/api/consume
+```
+##### POST Parameter
+code=123
+
+```javascript
+{
+	code: 123
+}
+```
+
+##### Response
+
+##### status 1
+
+```javascript
+{
+	status: '1',
+	msg: '核销成功',
+}
+```
+
+##### status 0
+
+```javascript
+{
+	status: '0',
+	msg: '核销失败'
+}
+```
+##### status 2
+
+```javascript
+{
+	status: '2',
+	msg: '核销码错误'
+}
+```
+##### status 3
+
+```javascript
+{
+	status: '3',
+	msg: '该核销码已经核销过'
 }
 ```
