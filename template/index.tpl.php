@@ -86,7 +86,8 @@
             </div>
             <div class="details">
                 2017年<span class="date"><?php echo $conf['applyDate']; ?></span><br>
-                上海市黄浦区半淞园路498号
+                上海世博创意秀场<br>
+                黄浦区半淞园路498号
             </div>
             <div class="tips">
                 *本邀请函仅限本人使用
