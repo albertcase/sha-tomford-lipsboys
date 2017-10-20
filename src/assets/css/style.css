@@ -836,8 +836,9 @@ body {
 
 #pin-result .submitted-info {
   text-align: center;
-  padding-top: 1rem;
+  padding-top: 0.5rem;
   font-size: 0.34rem;
+  line-height: 1.5;
 }
 #pin-result .submitted-info .t1 {
   font-size: 0.48rem;
