@@ -15,11 +15,11 @@ $feild = $argv[1] . " 18:00-21:00";
 $num = $argv[2];
 
 if($feild == '') {
-    echo pirntData(0, 'feild null');
+    echo 'feild null';
 }
 
 if($num == '') {
-    echo pirntData(0, 'num null');
+    echo 'num null';
 }
 $nowNum = $redis->hGet($pkey, $feild);
 $num = (int)$nowNum + (int)$num;
