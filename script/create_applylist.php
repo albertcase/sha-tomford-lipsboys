@@ -5,15 +5,9 @@ require_once SITE_URL . "/config/config.php";
 
 use Lib\Helper;
 use Lib\PDO;
-use \Lib\Redis;
+use Lib\Redis;
 
 $list = array(
-    // array('name' => '11月3日 18:00-19:00', "num" => 700),
-    // array('name' => '11月3日 19:00-20:00', "num" => 700),
-    // array('name' => '11月3日 20:00-21:00', "num" => 700),
-    // array('name' => '11月4日 18:00-19:00', "num" => 700),
-    // array('name' => '11月4日 19:00-20:00', "num" => 700),
-    // array('name' => '11月4日 20:00-21:00', "num" => 700),
     array('name' => '11月3日 18:00-21:00', "num" => 700),
     array('name' => '11月4日 18:00-21:00', "num" => 700),
 );
