@@ -79,7 +79,7 @@ class PageController extends Controller
         foreach($list as $k => $v) {
             $list[$k]['num'] = $redis->hGet('quality', $v['name']) ? $redis->hGet('quality', $v['name']) : 0;
         }
-        if((int)$list[0]['num'] > 0 && (int)$list[1]['num'] > 0) {
+        if((int)$list[0]['num'] > 0 || (int)$list[1]['num'] > 0) {
             return 1;
         } else {
             return 0;
