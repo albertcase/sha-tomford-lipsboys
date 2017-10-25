@@ -33,7 +33,7 @@ class pushConsume
             // var_dump($row);exit;
             $timeslot = explode(' ', $row['timeslot']);
             $date = $timeslot[0];
-            $url = "http://tf-lipsboys.samesamechina.com/consume?code={$row['provecode']}";
+            $url = "http://tf-lipsboys.samesamechina.com/qrcode?code={$row['provecode']}";
             $short_url = $this->shortUrl($url);
             if($short_url) {
                 $this->send($row['phone'], $row['timeslot'], $short_url, $row['uid']);
@@ -63,7 +63,7 @@ class pushConsume
     {
         $ch = curl_init();
         $apikey = "b42c77ce5a2296dcc0199552012a4bd9";
-        $text = "【汤姆福特】\n请阁下于{$date}活动当日18:00-21:00凭此二维码予工作人员验证入场，请勿自行扫描以免失效。（此二维码只限本人使用）({$url})";
+        $text = "【汤姆福特】\n请阁下于{$date}活动当日18:00-21:00凭此二维码予工作人员验证入场，请勿自行扫描以免失效。（此二维码只限本人使用）{$url}";
         $data = array(
           'text' => $text,
           'apikey' => $apikey,
