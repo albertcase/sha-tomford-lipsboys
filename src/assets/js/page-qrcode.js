@@ -5,11 +5,9 @@ $(document).ready(function(){
         new QRCode(document.getElementById('generate-qrcode'), window.location.origin+'/consume?code='+curCode);
     }
 
-
-
 //    for consume page
 //    已经核销
-    if(isConsumed){
+    if(isConsumed == '1'){
         $('.btn-check').addClass('hide');
         $('.msg').removeClass('hide').html('已核销');
     }
