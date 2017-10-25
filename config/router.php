@@ -14,6 +14,7 @@ $routers['/clear'] = array('CampaignBundle\Page', 'clearCookie');
 //Campaign
 $routers['/'] = array('CampaignBundle\Page', 'index');
 $routers['/consume'] = array('CampaignBundle\Page', 'prove');
+$routers['/qrcode'] = array('CampaignBundle\Page', 'qrcode');
 
 //API
 $routers['/api/phonecode'] = array('CampaignBundle\Api', 'phoneCode');

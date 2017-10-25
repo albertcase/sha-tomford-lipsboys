@@ -35,6 +35,12 @@ class PageController extends Controller
         return $this->render('index', array('conf' => $config));
     }
 
+    public function qrcodeAction()
+    {
+        $config = array();
+        return $this->render('qrcode', array('conf' => $config));   
+    }
+
     public function proveAction()
     {
         $proveCode = $_GET['code'];
