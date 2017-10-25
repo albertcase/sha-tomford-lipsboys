@@ -105,63 +105,6 @@ class ApiController extends Controller
     }
 
     /**
-     * 核销API
-     */
-    public function consumeAction()
-    {
-        $request = $this->request;
-        $fields = array(
-            'code' => array('notnull', '120'),
-        );
-        $request->validation($fields);
-        $code = $request->request->get('code');
-
-        $prove = $this->checkProveStatus($code);
-        if($prove) {
-            if((int)$prove->provestatus == 1) {
-                $data = array('status' => 3, 'msg' => '该核销码已经核销过');
-                $this->dataPrint($data);
-            }
-        } else {
-            $data = array('status' => 2, 'msg' => '核销码错误');
-            $this->dataPrint($data);
-        }
-
-        if(!$this->updateProveStatus($code)) {
-            $data = array('status' => 0, 'msg' => '核销失败');
-            $this->dataPrint($data);
-        }
-        $data = array('status' => 1, 'msg' => '核销成功');
-        $this->dataPrint($data);
-    }
-
-    private function checkProveStatus($proveCode)
-    {
-        global $user;
-        $sql = "SELECT `id`, `provestatus` FROM `apply` WHERE `provecode` = :provecode and `uid` = :uid";
-        $query = $this->_pdo->prepare($sql);
-        $query->execute(array(':provecode' => $proveCode, ':uid' => $user->uid));
-        $row = $query->fetch(\PDO::FETCH_ASSOC);
-        if($row) {
-            return (object)$row;
-        }
-        return 0;
-    }
-
-    private function updateProveStatus($code)
-    {
-        global $user;
-        $condition = array(
-            array('uid', $user->uid, '='),
-            array('provecode', $code, '='),
-        );
-        $info = new \stdClass();
-        $info->provestatus = 1;
-        $info->updated = date('Y-m-d H:i:s');
-        return $this->helper->updateTable('apply', $info, $condition);
-    }
-
-    /**
      * 写入预约剩余名额
      * 如果已经为0不做处理
      */

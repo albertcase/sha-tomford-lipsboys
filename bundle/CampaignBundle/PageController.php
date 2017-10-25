@@ -14,7 +14,9 @@ class PageController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
         $this->_pdo = PDO::getInstance();
+        $this->helper = new Helper();
     }
 
     public function indexAction()
@@ -62,6 +64,38 @@ class PageController extends Controller
 		    $this->statusPrint('success');
     }
 
+
+    /**
+     * 核销API
+     */
+    public function consumeAction()
+    {
+        $request = $this->request;
+        $fields = array(
+            'code' => array('notnull', '120'),
+        );
+        $request->validation($fields);
+        $code = $request->request->get('code');
+
+        $prove = $this->checkProveStatus($code);
+        if($prove) {
+            if((int)$prove->provestatus == 1) {
+                $data = array('status' => 3, 'msg' => '该核销码已经核销过');
+                $this->dataPrint($data);
+            }
+        } else {
+            $data = array('status' => 2, 'msg' => '核销码错误');
+            $this->dataPrint($data);
+        }
+
+        if(!$this->updateProveStatus($code)) {
+            $data = array('status' => 0, 'msg' => '核销失败');
+            $this->dataPrint($data);
+        }
+        $data = array('status' => 1, 'msg' => '核销成功');
+        $this->dataPrint($data);
+    }
+
     private function checkProveStatus($proveCode)
     {
         $sql = "SELECT `id`, `provestatus` FROM `apply` WHERE `provecode` = :provecode";
@@ -72,6 +106,17 @@ class PageController extends Controller
             return (object)$row;
         }
         return 0;
+    }
+
+    private function updateProveStatus($code)
+    {
+        $condition = array(
+            array('provecode', $code, '='),
+        );
+        $info = new \stdClass();
+        $info->provestatus = 1;
+        $info->updated = date('Y-m-d H:i:s');
+        return $this->helper->updateTable('apply', $info, $condition);
     }
 
     private function getApplitNum()
