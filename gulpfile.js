@@ -35,13 +35,20 @@ var path = {
     luckydrawJs:[
         './src/assets/js/lib/zepto.min.js',
         './src/assets/js/lib/pre-loader.js',
-        './src/assets/js/lib/cookie.js',
         './src/assets/js/rem.js',
-        './src/assets/js/region.js',
         './src/assets/js/common.js',
         './src/assets/js/api.js',
         './src/assets/js/wxshare.js',
         './src/assets/js/form-luckydraw.js',
+    ],
+    qrcodeJs:[
+        './src/assets/js/lib/zepto.min.js',
+        './src/assets/js/lib/qrcode.min.js',
+        './src/assets/js/rem.js',
+        './src/assets/js/common.js',
+        './src/assets/js/api.js',
+        './src/assets/js/wxshare.js',
+        './src/assets/js/page-qrcode.js',
     ],
     images:[
         './src/assets/*.{png,jpg,jpeg}',
@@ -88,6 +95,15 @@ gulp.task('scripts_form_luckydraw',['clean'], function() {
         .pipe(gulp.dest('./src/dist/js'));
 });
 
+gulp.task('scripts_page_qrcode',['clean'], function() {
+    return gulp.src(path.qrcodeJs)
+        .pipe(concat('all_page_qrcode.js'))
+        .pipe(gulp.dest('./src/dist'))
+        .pipe(rename('all_page_qrcode.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest('./src/dist/js'));
+});
+
 // Concatenate & Minify
 gulp.task("tinypng", function(){
     gulp.src(path.images)
@@ -105,9 +121,10 @@ gulp.task("tinypng", function(){
 gulp.task('watch', ['clean'],function() {
     gulp.watch(path.css,['css']);
     gulp.watch(path.luckydrawJs,['scripts_form_luckydraw']);
+    gulp.watch(path.qrcodeJs,['scripts_page_qrcode']);
 });
 
 // Default Task
-gulp.task('default', ['watch', 'css','scripts_form_luckydraw','browser-sync']);
+gulp.task('default', ['watch', 'css','scripts_form_luckydraw','scripts_page_qrcode','browser-sync']);
 
 

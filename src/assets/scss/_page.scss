@@ -258,3 +258,21 @@ $ani-delay-5: 5000ms;
     }
   }
 }
+
+//for page-consume-qrcode
+.page-consume-qrcode{
+  .logo-2{
+    @include size(4.11rem,1.28rem);
+    padding: 2rem 0 1.6rem;
+    margin: 0 auto;
+  }
+  .des{
+    text-align: center;
+  }
+  #generate-qrcode{
+    width: 4rem;
+    padding: 0.4rem;
+    margin: 0 auto 0.4rem;
+    background: #fff;
+  }
+}

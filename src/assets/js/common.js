@@ -165,8 +165,6 @@ $(document).ready(function(){
 		$(this).parent().parent('.alertpop').remove();
 	});
     //Common.overscroll(document.querySelector('.wrapper'));
-    Common.overscroll(document.querySelector('#pin-shoplists'));
-    Common.overscroll(document.querySelector('#pin-fillform'));
     document.body.addEventListener('touchmove', function(evt) {
         if(!evt._isScroller) {
             evt.preventDefault();

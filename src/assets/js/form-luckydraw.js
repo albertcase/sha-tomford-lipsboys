@@ -98,6 +98,10 @@
     //bind Events
     controller.prototype.bindEvent = function(){
         var self = this;
+
+        Common.overscroll(document.querySelector('#pin-shoplists'));
+        Common.overscroll(document.querySelector('#pin-fillform'));
+
         /*
          * submit the form
          * */
