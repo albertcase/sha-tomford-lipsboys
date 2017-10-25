@@ -33,11 +33,12 @@ class pushConsume
             // var_dump($row);exit;
             $timeslot = explode(' ', $row['timeslot']);
             $date = $timeslot[0];
-            // $url = "http://tf-lipsboys.samesamechina.com/qrcode?code={$row['provecode']}";
-            $url = "http://172.20.144.47:9122/qrcode?code={$row['provecode']}";
+            $url = "http://tf-lipsboys.samesamechina.com/qrcode?code={$row['provecode']}";
+            // local test url
+            // $url = "http://172.20.144.47:9122/qrcode?code={$row['provecode']}"; 
             $short_url = $this->shortUrl($url);
             if($short_url) {
-                $this->send($row['phone'], $row['timeslot'], $short_url, $row['uid']);
+                $this->send($row['phone'], $date, $short_url, $row['uid']);
             } else {
                 break;
             }     
