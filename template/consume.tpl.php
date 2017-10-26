@@ -12,7 +12,7 @@
     <script>
         var isConsumed = "<?php echo $conf['isProve']?>"; //1已核销，0未核销
     </script>
-    <script src="http://tomfordwechat.samesamechina.com/api/v1/js/65454635-a701-4ea4-b7f5-5cebae7e6674/wechat?debug=1"></script>
+    <script src="http://tomfordwechat.samesamechina.com/api/v1/js/65454635-a701-4ea4-b7f5-5cebae7e6674/wechat"></script>
     <script src="../src/dist/js/all_page_qrcode.min.js"></script>
 </head>
 <body class="page-home">

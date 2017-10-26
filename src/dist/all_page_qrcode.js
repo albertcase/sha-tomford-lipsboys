@@ -385,6 +385,9 @@ $(document).ready(function(){
 
 });
 $(document).ready(function(){
+    wx.ready(function(){
+        wx.hideAllNonBaseMenuItem();
+    });
     var curCode = Common.getParameterByName('code');
     //generate qrcode
     if($('#generate-qrcode').length){
