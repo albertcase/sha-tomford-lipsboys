@@ -29,9 +29,9 @@
         <img src="../src/dist/images/show-2.jpg" alt="tomford"/>
     </div>
     <div class="check-block">
-        <div class="btn-check">
-            确认入场
-        </div>
+        <!--<div class="btn-check">-->
+            <!--确认入场-->
+        <!--</div>-->
         <div class="msg hide">确认成功</div>
     </div>
 </div>

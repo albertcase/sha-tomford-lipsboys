@@ -5,15 +5,15 @@ $(document).ready(function(){
     var curCode = Common.getParameterByName('code');
     //generate qrcode
     if($('#generate-qrcode').length){
-        new QRCode(document.getElementById('generate-qrcode'), window.location.origin+'/consume?code='+curCode);
+        new QRCode(document.getElementById('generate-qrcode'), curCode);
     }
 
 //    for consume page
 //    已经核销
-    if(isConsumed == '1'){
-        $('.btn-check').addClass('hide');
-        $('.msg').removeClass('hide').html('已核销');
-    }
+//    if(isConsumed == '1'){
+//        $('.btn-check').addClass('hide');
+//        $('.msg').removeClass('hide').html('已核销');
+//    }
 
     $('.btn-check').on('touchstart', function(){
         Common.msgBox.add('loading...');
