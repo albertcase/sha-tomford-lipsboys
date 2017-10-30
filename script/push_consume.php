@@ -39,7 +39,9 @@ class pushConsume
             $short_url = $this->shortUrl($url);
             if($short_url) {
                 $this->send($row['phone'], $date, $short_url, $row['uid']);
+                echo $row['phone'] . "send ok!\n";
             } else {
+                echo $row['phone'] . "send failed!\n";
                 break;
             }     
         }
