@@ -42,7 +42,6 @@ class pushConsume
                 echo $row['phone'] . "send ok!\n";
             } else {
                 echo $row['phone'] . "send failed!\n";
-                break;
             }     
         }
         exit;
