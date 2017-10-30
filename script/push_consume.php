@@ -21,7 +21,7 @@ class pushConsume
     {
         $this->helper = new Helper();
         $this->_pdo = PDO::getInstance();
-        $this->accessToken = 'qckfPU4ijV-KCiU_cN5XQCZGN5sdNHk13RhPnkIBS8-aMurOLF2bqJGZeBA_6wS62AFABUgZgARM1RfU43Rt3DzfPNuzeU1KXJkTfVJ-1BPevm3We0QaG-7sc7owYsfBRVRcABAVZV';
+        $this->accessToken = 'xe3NigZYouCXFeVlWyy2d2Y4pCKfGNi6VyHL1qmF-rrzMxTrPGK1dPL_XFJ1dQEH_fbSrhJbAh9_UPxkQPlPsRYr_9DkyOmN-J0lFuku6MiqjARxjpACc3vS1XHgmaNIDVEfAEAJBK';
         // $this->accessToken = $this->getAccessToken();
     }
 
