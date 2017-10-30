@@ -21,7 +21,8 @@ class pushConsume
     {
         $this->helper = new Helper();
         $this->_pdo = PDO::getInstance();
-        $this->accessToken = $this->getAccessToken();
+        $this->accessToken = 'qckfPU4ijV-KCiU_cN5XQCZGN5sdNHk13RhPnkIBS8-aMurOLF2bqJGZeBA_6wS62AFABUgZgARM1RfU43Rt3DzfPNuzeU1KXJkTfVJ-1BPevm3We0QaG-7sc7owYsfBRVRcABAVZV';
+        // $this->accessToken = $this->getAccessToken();
     }
 
     public function sendSMSConsume()
